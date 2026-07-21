@@ -12,8 +12,8 @@ cd ~/Home/Enterprise/enterprise
 pnpm publish:api-docs
 ```
 
-Requires `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment
-(same credentials as the public site CI).
+Requires Cloudflare credentials from **1Password** (Engineering → **Cloudflare API Token**),
+via `modules/setup-1p.json`, or `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` in the environment.
 
 Options:
 
@@ -72,6 +72,21 @@ npm run check-config       # validate scalar.config.json
 | --- | -------- | ------ |
 | https://developers.enterprisecrm.com | **Cloudflare Pages** | Production |
 | https://enterprise-api-docs-9s9.pages.dev | Cloudflare Pages | Deploy preview URL |
+
+### Custom domain DNS (required)
+
+`developers.enterprisecrm.com` must CNAME to the Pages project — **not** Netlify.
+
+| Setting | Value |
+| ------- | ----- |
+| Type | `CNAME` |
+| Name | `developers` |
+| Target | `enterprise-api-docs-9s9.pages.dev` |
+| Proxy | Proxied (orange cloud) |
+
+If the CNAME still points at `enterprise-api-docs.netlify.app` while Cloudflare proxy is enabled, the dashboard shows **SSL cipher mismatch** / **522** errors because the edge connects to the wrong origin.
+
+After updating DNS, wait for the Pages custom domain to reach **Active** (hostname + certificate validation) in **Workers & Pages → enterprise-api-docs → Custom domains**.
 
 ## GitHub Actions
 
