@@ -11,14 +11,37 @@
 
 /* Uniform link color on content pages — visited and unvisited identical */
 .page-content a:link,
-.page-content a:visited {
+.page-content a:visited,
+.t-editor__anchor,
+.t-editor__anchor:link,
+.t-editor__anchor:visited {
+  color: #0f66d3 !important;
+  text-decoration-color: #0f66d3 !important;
+}
+
+/* Hover underline matches the blue link color */
+.page-content a:hover,
+.t-editor__anchor:hover {
+  text-decoration: underline !important;
+  text-decoration-color: #0f66d3 !important;
+}
+
+/* Bullet markers inherit the blue link color */
+.t-editor__list li::marker {
   color: #0f66d3;
 }
 
-/* TOC links — gray, uniform across states */
+/* TOC links — gray for inactive, blue for active */
 aside.toc a.anchor,
 aside.toc a.anchor:visited {
   color: #6b7280 !important;
+  text-decoration-color: #6b7280 !important;
+}
+
+aside.toc li.active a.anchor,
+aside.toc li.active a.anchor:visited {
+  color: #0f66d3 !important;
+  text-decoration-color: #0f66d3 !important;
 }
 
 /* TOC active indicator line — blue */

@@ -11,29 +11,49 @@
       "links": [
         {
           "rel": "stylesheet",
-          "href": "/assets/custom.css"
+          "href": "/custom.css"
         },
         {
           "rel": "icon",
-          "type": "image/svg+xml",
-          "href": "/favicon.svg"
+          "href": "/favicon/favicon.svg",
+          "type": "image/svg+xml"
         },
         {
           "rel": "icon",
           "type": "image/png",
           "sizes": "32x32",
-          "href": "/favicon-32x32.png"
+          "href": "/favicon/icon-dark-32.png",
+          "media": "(prefers-color-scheme: dark)"
+        },
+        {
+          "rel": "icon",
+          "type": "image/png",
+          "sizes": "32x32",
+          "href": "/favicon/icon-light-32.png",
+          "media": "(prefers-color-scheme: light)"
         },
         {
           "rel": "icon",
           "type": "image/png",
           "sizes": "16x16",
-          "href": "/favicon-16x16.png"
+          "href": "/favicon/icon-dark-16.png",
+          "media": "(prefers-color-scheme: dark)"
+        },
+        {
+          "rel": "icon",
+          "type": "image/png",
+          "sizes": "16x16",
+          "href": "/favicon/icon-light-16.png",
+          "media": "(prefers-color-scheme: light)"
         },
         {
           "rel": "apple-touch-icon",
           "sizes": "180x180",
-          "href": "/favicon-180x180.png"
+          "href": "/favicon/apple-touch-icon.png"
+        },
+        {
+          "rel": "manifest",
+          "href": "/favicon/site.webmanifest"
         }
       ],
       "scripts": [
@@ -44,6 +64,9 @@
           "path": "assets/spa-nav.js"
         }
       ]
+    },
+    "search": {
+      "enabled": true
     }
   },
   "navigation": {
@@ -119,6 +142,12 @@
             "filepath": "docs/guides/webhooks.md",
             "icon": "phosphor/regular/webhooks-logo"
           },
+          "/modules/integrations": {
+            "type": "page",
+            "title": "Integrations",
+            "filepath": "docs/guides/modules/integrations.md",
+            "icon": "phosphor/regular/plugs-connected"
+          },
           "/modules/ai": {
             "type": "page",
             "title": "AI",
@@ -172,12 +201,6 @@
             "title": "Identity",
             "filepath": "docs/guides/modules/identity.md",
             "icon": "phosphor/regular/user"
-          },
-          "/modules/integrations": {
-            "type": "page",
-            "title": "Integrations",
-            "filepath": "docs/guides/modules/integrations.md",
-            "icon": "phosphor/regular/plugs-connected"
           },
           "/modules/inventory": {
             "type": "page",

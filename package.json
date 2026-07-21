@@ -3,6 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "preview": "npx @scalar/cli project preview & node patch-preview.mjs"
+    "preview": "npx @scalar/cli project preview & node patch-preview.mjs",
+    "check-config": "npx @scalar/cli project check-config",
+    "build": "node scripts/build-static.mjs",
+    "build:legacy": "node scripts/build-legacy.mjs",
+    "validate:dist": "node scripts/validate-dist.mjs",
+    "deploy": "npm run build && npm run validate:dist && npx wrangler pages deploy dist --project-name=enterprise-api-docs --branch=production --commit-dirty=true",
+    "deploy:production": "npm run deploy"
+  },
+  "devDependencies": {
+    "marked": "^15.0.12",
+    "wrangler": "^4.100.0"
   }
 }

@@ -1,161 +1,97 @@
 # Enterprise API Docs
 
-> Proprietary API reference for the Enterprise platform, built with [Scalar Docs](https://scalar.com).
+> Proprietary API reference for the Enterprise platform.
+
+**Production:** https://developers.enterprisecrm.com
 
 [![OpenAPI 3.1](https://img.shields.io/badge/OpenAPI-3.1-green.svg)](./docs/api-reference/openapi.all-modules.json)
 
 ## Overview
 
-This repository is the source of truth for the Enterprise API documentation. It contains:
+This repository is the source of truth for the Enterprise API documentation:
 
 - **1,236 API operations** across **20 modules**
-- Interactive [Scalar](https://scalar.com) API reference powered by the OpenAPI 3.1 spec
-- Guide pages for authentication, getting started, and each module
+- **Guides** — authentication, getting started, webhooks, and per-module overviews
+- **API Reference** — interactive OpenAPI docs (Scalar API Reference widget)
 
 ## Project structure
 
 ```
 enterprise-api-docs/
 ├── docs/
-│   ├── api-reference/
-│   │   ├── openapi.all-modules.json   # Aggregate OpenAPI 3.1 spec
-│   │   └── *.json                     # Per-module spec files
-│   └── guides/
-│       ├── introduction.md
-│       ├── getting-started.md
-│       └── authentication.md
-├── scalar.config.json                 # Scalar Docs 2.0 configuration
-├── LICENSE                            # Proprietary
+│   ├── api-reference/          # OpenAPI 3.1 specs (per module)
+│   └── guides/                 # Markdown guide pages
+├── assets/                     # Site CSS, search, favicons, theme helpers
+├── scripts/
+│   ├── build-static.mjs        # Production static site build
+│   ├── build-legacy.mjs        # Legacy Scalar SPA build (rollback only)
+│   └── validate-dist.mjs       # Post-build smoke tests
+├── scalar.config.json          # Scalar Docs config (preview + route source)
+├── patch-preview.mjs           # Keeps favicon/CSS injected during preview
+├── DEPLOY_CLOUDFLARE.md        # Hosting & deployment details
 └── README.md
 ```
 
-## Local development
+## Local development (authoring)
 
-### Prerequisites
-
-- [Node.js](https://nodejs.org) 18+
-
-### Start the local preview server
+Use Scalar's preview server to edit guides and validate navigation:
 
 ```bash
-npx @scalar/cli project preview
+npm run preview
+# equivalent to:
+# npx @scalar/cli project preview & node patch-preview.mjs
 ```
 
-The docs will be available at **http://localhost:7970** with live reload on every file change.
+Open **http://localhost:7970** — live reload on file changes.
 
-### Validate your config
+Validate config:
 
 ```bash
-npx @scalar/cli project check-config
+npm run check-config
 ```
 
-## Self-hosting on Kubernetes
+## Production build
 
-The Scalar API Reference is a standalone HTML widget with no server-side dependencies. The recommended self-hosted setup is a static NGINX container serving a single `index.html` that loads the spec from the same origin or a CDN.
+The production site is a **static-first** build for fast first paint:
 
-### 1. Build a Docker image
-
-```dockerfile
-# Dockerfile
-FROM nginx:alpine
-COPY docs/api-reference/openapi.all-modules.json /usr/share/nginx/html/openapi.json
-COPY k8s/nginx.conf /etc/nginx/conf.d/default.conf
-COPY k8s/index.html /usr/share/nginx/html/index.html
-```
-
-`k8s/index.html` — minimal Scalar embed:
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Enterprise API</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <script
-      id="api-reference"
-      data-url="/openapi.json"
-      src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
-  </body>
-</html>
-```
-
-### 2. Kubernetes manifests
-
-```yaml
-# k8s/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: enterprise-api-docs
-  labels:
-    app: enterprise-api-docs
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: enterprise-api-docs
-  template:
-    metadata:
-      labels:
-        app: enterprise-api-docs
-    spec:
-      containers:
-        - name: docs
-          image: ghcr.io/thefuturebegins/enterprise-api-docs:latest
-          ports:
-            - containerPort: 80
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: enterprise-api-docs
-spec:
-  selector:
-    app: enterprise-api-docs
-  ports:
-    - port: 80
-      targetPort: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: enterprise-api-docs
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-spec:
-  rules:
-    - host: docs.enterprise.internal
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: enterprise-api-docs
-                port:
-                  number: 80
-```
-
-### 3. Build and push
+| Route | Delivery |
+| ----- | -------- |
+| `/`, `/getting-started`, guide pages | Pre-rendered HTML (~instant load) |
+| `/api/*` | Static shell + lazy-loaded Scalar API Reference widget |
 
 ```bash
-docker build -t ghcr.io/thefuturebegins/enterprise-api-docs:latest .
-docker push ghcr.io/thefuturebegins/enterprise-api-docs:latest
-kubectl apply -f k8s/
+npm run build              # writes dist/ (86 files, ~6 MB)
+npm run validate:dist      # smoke test (local serve or set VALIDATE_BASE_URL)
+```
+
+## Deployment
+
+| Command | Target |
+| ------- | ------ |
+| `pnpm publish:api-docs` (from **enterprise** repo) | Generate specs → build → **Cloudflare Pages** |
+| `npm run deploy:production` | **Cloudflare Pages** → `developers.enterprisecrm.com` |
+
+See **[DEPLOY_CLOUDFLARE.md](./DEPLOY_CLOUDFLARE.md)** for the full publish workflow, CI, and architecture.
+
+### Where the site is hosted
+
+| URL | Platform | Notes |
+| --- | -------- | ----- |
+| https://developers.enterprisecrm.com | Cloudflare Pages | **Production** |
+| https://enterprise-api-docs-9s9.pages.dev | Cloudflare Pages | Deploy preview URL |
+
+## Legacy Scalar SPA build
+
+The previous production build bundled the full Scalar Docs SPA (~29,000 JS chunks, ~159 MB).
+It caused multi-second white screens on first load. Kept for emergency rollback only:
+
+```bash
+npm run build:legacy
+npm run deploy:production   # deploy legacy build to Cloudflare Pages
 ```
 
 ## Legal
 
 Copyright © 2026 Enterprise Marketplace Ltd. All rights reserved.
 
-This documentation is proprietary and confidential. Use is governed by the [Enterprise Master Services Agreement](https://enterprisecrm.com/legal/msa). Unauthorized reproduction, distribution, or disclosure is strictly prohibited.
+Use is governed by the [Enterprise Master Services Agreement](https://enterprisecrm.com/legal/msa).
