@@ -3,7 +3,7 @@
   "info": {
     "title": "Permissions API",
     "version": "1.0.6",
-    "description": "Authorisation layer \u2014 check and enforce permission rules based on user roles and explicit grants.\n\n## Sections\n\n- [Authorization](/api/permissions/tag/authorization)"
+    "description": "OpenAPI 3.1 document for the `permissions` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -64,7 +64,7 @@
         ],
         "x-scope": "clientServer",
         "x-permission": "permissions:authorization:read",
-        "description": "Check if user has a specific permission\n\nCustom logic: Resolves user \u2192 roles \u2192 permissions chain"
+        "description": "Check if user has a specific permission\n\nCustom logic: Resolves user → roles → permissions chain"
       }
     },
     "/api/permissions/user/{userId}": {
@@ -381,11 +381,5 @@
         ]
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

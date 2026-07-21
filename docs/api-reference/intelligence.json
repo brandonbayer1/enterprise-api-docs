@@ -1,0 +1,2112 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Intelligence API",
+    "version": "1.0.13",
+    "description": "OpenAPI 3.1 document for the `intelligence` module, generated from Enterprise module interface specifications."
+  },
+  "tags": [
+    {
+      "name": "Brokerage Url Registry"
+    },
+    {
+      "name": "Intel Pipeline Runs"
+    },
+    {
+      "name": "Intel Provider Dead Letters"
+    },
+    {
+      "name": "Intel Providers"
+    },
+    {
+      "name": "Intel Source Provider Dependencies"
+    },
+    {
+      "name": "Intel Sources"
+    }
+  ],
+  "paths": {
+    "/api/intelligence/intelSources": {
+      "get": {
+        "operationId": "intelligence.intelSources.query",
+        "tags": [
+          "Intel Sources"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntelSource"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IntelSourceFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSources:read"
+      },
+      "post": {
+        "operationId": "intelligence.intelSources.create",
+        "tags": [
+          "Intel Sources"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIntelSourceInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSources:write"
+      }
+    },
+    "/api/intelligence/intelSources/{id}": {
+      "get": {
+        "operationId": "intelligence.intelSources.getById",
+        "tags": [
+          "Intel Sources"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSources:read"
+      },
+      "put": {
+        "operationId": "intelligence.intelSources.update",
+        "tags": [
+          "Intel Sources"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIntelSourceInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSources:write"
+      },
+      "delete": {
+        "operationId": "intelligence.intelSources.delete",
+        "tags": [
+          "Intel Sources"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSources:delete"
+      }
+    },
+    "/api/intelligence/intelSourceProviderDependencies": {
+      "get": {
+        "operationId": "intelligence.intelSourceProviderDependencies.query",
+        "tags": [
+          "Intel Source Provider Dependencies"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntelSourceProviderDependency"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IntelSourceProviderDependencyFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSourceProviderDependencies:read"
+      },
+      "post": {
+        "operationId": "intelligence.intelSourceProviderDependencies.create",
+        "tags": [
+          "Intel Source Provider Dependencies"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelSourceProviderDependency"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIntelSourceProviderDependencyInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSourceProviderDependencies:write"
+      }
+    },
+    "/api/intelligence/intelSourceProviderDependencies/{id}": {
+      "get": {
+        "operationId": "intelligence.intelSourceProviderDependencies.getById",
+        "tags": [
+          "Intel Source Provider Dependencies"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelSourceProviderDependency"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSourceProviderDependencies:read"
+      },
+      "put": {
+        "operationId": "intelligence.intelSourceProviderDependencies.update",
+        "tags": [
+          "Intel Source Provider Dependencies"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelSourceProviderDependency"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIntelSourceProviderDependencyInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSourceProviderDependencies:write"
+      },
+      "delete": {
+        "operationId": "intelligence.intelSourceProviderDependencies.delete",
+        "tags": [
+          "Intel Source Provider Dependencies"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelSourceProviderDependencies:delete"
+      }
+    },
+    "/api/intelligence/intelPipelineRuns": {
+      "get": {
+        "operationId": "intelligence.intelPipelineRuns.query",
+        "tags": [
+          "Intel Pipeline Runs"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntelPipelineRun"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IntelPipelineRunFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelPipelineRuns:read"
+      },
+      "post": {
+        "operationId": "intelligence.intelPipelineRuns.create",
+        "tags": [
+          "Intel Pipeline Runs"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelPipelineRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIntelPipelineRunInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelPipelineRuns:write"
+      }
+    },
+    "/api/intelligence/intelPipelineRuns/{id}": {
+      "get": {
+        "operationId": "intelligence.intelPipelineRuns.getById",
+        "tags": [
+          "Intel Pipeline Runs"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelPipelineRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelPipelineRuns:read"
+      },
+      "put": {
+        "operationId": "intelligence.intelPipelineRuns.update",
+        "tags": [
+          "Intel Pipeline Runs"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelPipelineRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIntelPipelineRunInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelPipelineRuns:write"
+      },
+      "delete": {
+        "operationId": "intelligence.intelPipelineRuns.delete",
+        "tags": [
+          "Intel Pipeline Runs"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelPipelineRuns:delete"
+      }
+    },
+    "/api/intelligence/intelProviders": {
+      "get": {
+        "operationId": "intelligence.intelProviders.query",
+        "tags": [
+          "Intel Providers"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntelProvider"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IntelProviderFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviders:read"
+      },
+      "post": {
+        "operationId": "intelligence.intelProviders.create",
+        "tags": [
+          "Intel Providers"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelProvider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIntelProviderInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviders:write"
+      }
+    },
+    "/api/intelligence/intelProviders/{id}": {
+      "get": {
+        "operationId": "intelligence.intelProviders.getById",
+        "tags": [
+          "Intel Providers"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelProvider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviders:read"
+      },
+      "put": {
+        "operationId": "intelligence.intelProviders.update",
+        "tags": [
+          "Intel Providers"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelProvider"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIntelProviderInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviders:write"
+      },
+      "delete": {
+        "operationId": "intelligence.intelProviders.delete",
+        "tags": [
+          "Intel Providers"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviders:delete"
+      }
+    },
+    "/api/intelligence/brokerageUrlRegistry": {
+      "get": {
+        "operationId": "intelligence.brokerageUrlRegistry.query",
+        "tags": [
+          "Brokerage Url Registry"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrokerageURL"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/BrokerageURLFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:brokerageUrlRegistry:read"
+      },
+      "post": {
+        "operationId": "intelligence.brokerageUrlRegistry.create",
+        "tags": [
+          "Brokerage Url Registry"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrokerageURL"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBrokerageURLInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:brokerageUrlRegistry:write"
+      }
+    },
+    "/api/intelligence/brokerageUrlRegistry/{id}": {
+      "get": {
+        "operationId": "intelligence.brokerageUrlRegistry.getById",
+        "tags": [
+          "Brokerage Url Registry"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrokerageURL"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:brokerageUrlRegistry:read"
+      },
+      "put": {
+        "operationId": "intelligence.brokerageUrlRegistry.update",
+        "tags": [
+          "Brokerage Url Registry"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrokerageURL"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBrokerageURLInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:brokerageUrlRegistry:write"
+      },
+      "delete": {
+        "operationId": "intelligence.brokerageUrlRegistry.delete",
+        "tags": [
+          "Brokerage Url Registry"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:brokerageUrlRegistry:delete"
+      }
+    },
+    "/api/intelligence/intelProviderDeadLetters": {
+      "get": {
+        "operationId": "intelligence.intelProviderDeadLetters.query",
+        "tags": [
+          "Intel Provider Dead Letters"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntelProviderDeadLetter"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IntelProviderDeadLetterFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviderDeadLetters:read"
+      },
+      "post": {
+        "operationId": "intelligence.intelProviderDeadLetters.create",
+        "tags": [
+          "Intel Provider Dead Letters"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelProviderDeadLetter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIntelProviderDeadLetterInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviderDeadLetters:write"
+      }
+    },
+    "/api/intelligence/intelProviderDeadLetters/{id}": {
+      "get": {
+        "operationId": "intelligence.intelProviderDeadLetters.getById",
+        "tags": [
+          "Intel Provider Dead Letters"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelProviderDeadLetter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviderDeadLetters:read"
+      },
+      "put": {
+        "operationId": "intelligence.intelProviderDeadLetters.update",
+        "tags": [
+          "Intel Provider Dead Letters"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntelProviderDeadLetter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIntelProviderDeadLetterInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviderDeadLetters:write"
+      },
+      "delete": {
+        "operationId": "intelligence.intelProviderDeadLetters.delete",
+        "tags": [
+          "Intel Provider Dead Letters"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "intelligence:intelProviderDeadLetters:delete"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IntelSource": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "providers": {
+            "type": "array",
+            "items": {}
+          },
+          "defaultParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "providerParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ]
+      },
+      "IntelSourceFilter": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "providers": {
+            "type": "array",
+            "items": {}
+          },
+          "defaultParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "providerParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ]
+      },
+      "CreateIntelSourceInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "providers": {
+            "type": "array",
+            "items": {}
+          },
+          "defaultParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "providerParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ],
+        "description": "Auto-generated createInput for IntelSource"
+      },
+      "UpdateIntelSourceInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "providers": {
+            "type": "array",
+            "items": {}
+          },
+          "defaultParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "providerParams": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ],
+        "description": "Auto-generated updateInput for IntelSource"
+      },
+      "IntelSourceProviderDependency": {
+        "type": "object",
+        "properties": {
+          "intelSourceId": {
+            "type": "string"
+          },
+          "intelSourceKey": {
+            "type": "string"
+          },
+          "intelProviderId": {
+            "type": "string"
+          },
+          "intelProviderKey": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderId": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderKey": {
+            "type": "string"
+          },
+          "requiredOutcome": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "intelSourceId",
+          "intelProviderId",
+          "dependsOnIntelProviderId"
+        ]
+      },
+      "IntelSourceProviderDependencyFilter": {
+        "type": "object",
+        "properties": {
+          "intelSourceId": {
+            "type": "string"
+          },
+          "intelSourceKey": {
+            "type": "string"
+          },
+          "intelProviderId": {
+            "type": "string"
+          },
+          "intelProviderKey": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderId": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderKey": {
+            "type": "string"
+          },
+          "requiredOutcome": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "intelSourceId",
+          "intelProviderId",
+          "dependsOnIntelProviderId"
+        ]
+      },
+      "CreateIntelSourceProviderDependencyInput": {
+        "type": "object",
+        "properties": {
+          "intelSourceId": {
+            "type": "string"
+          },
+          "intelSourceKey": {
+            "type": "string"
+          },
+          "intelProviderId": {
+            "type": "string"
+          },
+          "intelProviderKey": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderId": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderKey": {
+            "type": "string"
+          },
+          "requiredOutcome": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "intelSourceId",
+          "intelProviderId",
+          "dependsOnIntelProviderId"
+        ],
+        "description": "Auto-generated createInput for IntelSourceProviderDependency"
+      },
+      "UpdateIntelSourceProviderDependencyInput": {
+        "type": "object",
+        "properties": {
+          "intelSourceId": {
+            "type": "string"
+          },
+          "intelSourceKey": {
+            "type": "string"
+          },
+          "intelProviderId": {
+            "type": "string"
+          },
+          "intelProviderKey": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderId": {
+            "type": "string"
+          },
+          "dependsOnIntelProviderKey": {
+            "type": "string"
+          },
+          "requiredOutcome": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "intelSourceId",
+          "intelProviderId",
+          "dependsOnIntelProviderId"
+        ],
+        "description": "Auto-generated updateInput for IntelSourceProviderDependency"
+      },
+      "IntelPipelineRun": {
+        "type": "object",
+        "properties": {
+          "intelSources": {
+            "type": "array",
+            "items": {}
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          },
+          "providerStatuses": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "error": {
+            "type": "string"
+          },
+          "stats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "intelSources",
+          "status",
+          "tenantDbName"
+        ]
+      },
+      "IntelPipelineRunFilter": {
+        "type": "object",
+        "properties": {
+          "intelSources": {
+            "type": "array",
+            "items": {}
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          },
+          "providerStatuses": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "error": {
+            "type": "string"
+          },
+          "stats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "intelSources",
+          "status",
+          "tenantDbName"
+        ]
+      },
+      "CreateIntelPipelineRunInput": {
+        "type": "object",
+        "properties": {
+          "intelSources": {
+            "type": "array",
+            "items": {}
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          },
+          "providerStatuses": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "error": {
+            "type": "string"
+          },
+          "stats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "intelSources",
+          "status",
+          "tenantDbName"
+        ],
+        "description": "Auto-generated createInput for IntelPipelineRun"
+      },
+      "UpdateIntelPipelineRunInput": {
+        "type": "object",
+        "properties": {
+          "intelSources": {
+            "type": "array",
+            "items": {}
+          },
+          "industries": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          },
+          "providerStatuses": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "error": {
+            "type": "string"
+          },
+          "stats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "intelSources",
+          "status",
+          "tenantDbName"
+        ],
+        "description": "Auto-generated updateInput for IntelPipelineRun"
+      },
+      "IntelProvider": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ownerModuleId": {
+            "type": "string"
+          },
+          "ownerModuleKey": {
+            "type": "string"
+          },
+          "requires": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ]
+      },
+      "IntelProviderFilter": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ownerModuleId": {
+            "type": "string"
+          },
+          "ownerModuleKey": {
+            "type": "string"
+          },
+          "requires": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ]
+      },
+      "CreateIntelProviderInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ownerModuleId": {
+            "type": "string"
+          },
+          "ownerModuleKey": {
+            "type": "string"
+          },
+          "requires": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ],
+        "description": "Auto-generated createInput for IntelProvider"
+      },
+      "UpdateIntelProviderInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ownerModuleId": {
+            "type": "string"
+          },
+          "ownerModuleKey": {
+            "type": "string"
+          },
+          "requires": {
+            "type": "array",
+            "items": {}
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ],
+        "description": "Auto-generated updateInput for IntelProvider"
+      },
+      "BrokerageURL": {
+        "type": "object",
+        "properties": {
+          "normalizedEmployerName": {
+            "type": "string",
+            "description": "Lowercased name stripped of LLC/Inc/Realty for fuzzy matching"
+          },
+          "employerLicenseNumber": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          }
+        },
+        "required": [
+          "normalizedEmployerName",
+          "websiteUrl",
+          "status"
+        ]
+      },
+      "BrokerageURLFilter": {
+        "type": "object",
+        "properties": {
+          "normalizedEmployerName": {
+            "type": "string",
+            "description": "Lowercased name stripped of LLC/Inc/Realty for fuzzy matching"
+          },
+          "employerLicenseNumber": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          }
+        },
+        "required": [
+          "normalizedEmployerName",
+          "websiteUrl",
+          "status"
+        ]
+      },
+      "CreateBrokerageURLInput": {
+        "type": "object",
+        "properties": {
+          "normalizedEmployerName": {
+            "type": "string",
+            "description": "Lowercased name stripped of LLC/Inc/Realty for fuzzy matching"
+          },
+          "employerLicenseNumber": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          }
+        },
+        "required": [
+          "normalizedEmployerName",
+          "websiteUrl",
+          "status"
+        ],
+        "description": "Auto-generated createInput for BrokerageURL"
+      },
+      "UpdateBrokerageURLInput": {
+        "type": "object",
+        "properties": {
+          "normalizedEmployerName": {
+            "type": "string",
+            "description": "Lowercased name stripped of LLC/Inc/Realty for fuzzy matching"
+          },
+          "employerLicenseNumber": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          }
+        },
+        "required": [
+          "normalizedEmployerName",
+          "websiteUrl",
+          "status"
+        ],
+        "description": "Auto-generated updateInput for BrokerageURL"
+      },
+      "IntelProviderDeadLetter": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "summary": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "failedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "replayedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "provider",
+          "tenantDbName",
+          "error",
+          "attempts",
+          "status",
+          "failedAt"
+        ]
+      },
+      "IntelProviderDeadLetterFilter": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "summary": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "failedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "replayedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "provider",
+          "tenantDbName",
+          "error",
+          "attempts",
+          "status",
+          "failedAt"
+        ]
+      },
+      "CreateIntelProviderDeadLetterInput": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "summary": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "failedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "replayedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "provider",
+          "tenantDbName",
+          "error",
+          "attempts",
+          "status",
+          "failedAt"
+        ],
+        "description": "Auto-generated createInput for IntelProviderDeadLetter"
+      },
+      "UpdateIntelProviderDeadLetterInput": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "tenantDbName": {
+            "type": "string"
+          },
+          "tenantAccountKey": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "summary": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "failedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "replayedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "provider",
+          "tenantDbName",
+          "error",
+          "attempts",
+          "status",
+          "failedAt"
+        ],
+        "description": "Auto-generated updateInput for IntelProviderDeadLetter"
+      }
+    }
+  }
+}

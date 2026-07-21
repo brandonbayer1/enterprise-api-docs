@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Notifications API",
-    "version": "1.0.7",
-    "description": "In-app and push notification delivery \u2014 immediate sends, scheduled dispatches, and per-user inbox management.\n\n## Sections\n\n- [Notification Scheduling](/api/notifications/tag/notification-scheduling)\n- [Notifications](/api/notifications/tag/notifications)\n- [Send Notification](/api/notifications/tag/send-notification)"
+    "version": "1.0.8",
+    "description": "OpenAPI 3.1 document for the `notifications` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -1623,14 +1623,6 @@
           },
           "summary": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -1640,9 +1632,7 @@
           "type",
           "priority",
           "searchString",
-          "summary",
-          "createdByDate",
-          "updatedByDate"
+          "summary"
         ]
       },
       "CreateNotificationInput": {
@@ -1703,14 +1693,6 @@
           },
           "summary": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -1720,9 +1702,7 @@
           "type",
           "priority",
           "searchString",
-          "summary",
-          "createdByDate",
-          "updatedByDate"
+          "summary"
         ],
         "description": "Auto-generated createInput for Notification"
       },
@@ -1784,14 +1764,6 @@
           },
           "summary": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -1801,24 +1773,16 @@
           "type",
           "priority",
           "searchString",
-          "summary",
-          "createdByDate",
-          "updatedByDate"
+          "summary"
         ],
         "description": "Auto-generated updateInput for Notification"
       }
     }
   },
   "x-warnings": [
-    "Unresolved type 'NotificationChannel' \u2192 emitted permissive schema {}",
-    "Unresolved type 'NotificationDeliveryStatus' \u2192 emitted permissive schema {}",
-    "Unresolved type 'ScheduledNotificationStatus' \u2192 emitted permissive schema {}",
-    "Unresolved type 'ScheduleFrequency' \u2192 emitted permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
+    "Unresolved type 'NotificationChannel' → emitted permissive schema {}",
+    "Unresolved type 'NotificationDeliveryStatus' → emitted permissive schema {}",
+    "Unresolved type 'ScheduledNotificationStatus' → emitted permissive schema {}",
+    "Unresolved type 'ScheduleFrequency' → emitted permissive schema {}"
   ]
 }

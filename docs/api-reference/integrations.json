@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Integrations API",
-    "version": "1.0.9",
-    "description": "Unified data exchange: bidirectional sync with external systems, import/export pipelines, field mapping, and conflict resolution.\n\n## Sections\n\n- [Conflict Resolution](/api/integrations/tag/conflict-resolution)\n- [Data Sync](/api/integrations/tag/data-sync)\n- [Export Field Mappings](/api/integrations/tag/export-field-mappings)\n- [Export Profiles](/api/integrations/tag/export-profiles)\n- [Export Schedules](/api/integrations/tag/export-schedules)\n- [Exports](/api/integrations/tag/exports)\n- [Field Mapping](/api/integrations/tag/field-mapping)\n- [Import Field Mappings](/api/integrations/tag/import-field-mappings)\n- [Import Management](/api/integrations/tag/import-management)\n- [Import Profiles](/api/integrations/tag/import-profiles)\n- [Import Schedules](/api/integrations/tag/import-schedules)\n- [Imports](/api/integrations/tag/imports)\n- [Sync Engine](/api/integrations/tag/sync-engine)\n- [Sync Vendor Model Field Mappings](/api/integrations/tag/sync-vendor-model-field-mappings)\n- [Sync Vendors](/api/integrations/tag/sync-vendors)\n- [Synchronizations](/api/integrations/tag/synchronizations)"
+    "version": "1.0.15",
+    "description": "OpenAPI 3.1 document for the `integrations` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -4599,6 +4599,13 @@
             "type": "string",
             "description": "Null if ad-hoc import"
           },
+          "csvFile": {},
+          "fileId": {
+            "type": "string"
+          },
+          "fileKey": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -4626,6 +4633,11 @@
           },
           "initiatedBy": {
             "type": "string"
+          },
+          "results": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Combined result snapshot (fileInfo, processing, performance)"
           },
           "results.fileInfo": {
             "type": "object",
@@ -4671,13 +4683,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvFile": {},
-          "fileId": {
-            "type": "string"
-          },
-          "fileKey": {
-            "type": "string"
           }
         },
         "required": [
@@ -4696,6 +4701,13 @@
             "type": "string",
             "description": "Null if ad-hoc import"
           },
+          "csvFile": {},
+          "fileId": {
+            "type": "string"
+          },
+          "fileKey": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -4723,6 +4735,11 @@
           },
           "initiatedBy": {
             "type": "string"
+          },
+          "results": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Combined result snapshot (fileInfo, processing, performance)"
           },
           "results.fileInfo": {
             "type": "object",
@@ -4768,13 +4785,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvFile": {},
-          "fileId": {
-            "type": "string"
-          },
-          "fileKey": {
-            "type": "string"
           }
         },
         "required": [
@@ -4793,6 +4803,13 @@
             "type": "string",
             "description": "Null if ad-hoc import"
           },
+          "csvFile": {},
+          "fileId": {
+            "type": "string"
+          },
+          "fileKey": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -4820,6 +4837,11 @@
           },
           "initiatedBy": {
             "type": "string"
+          },
+          "results": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Combined result snapshot (fileInfo, processing, performance)"
           },
           "results.fileInfo": {
             "type": "object",
@@ -4865,13 +4887,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvFile": {},
-          "fileId": {
-            "type": "string"
-          },
-          "fileKey": {
-            "type": "string"
           }
         },
         "required": [
@@ -4891,6 +4906,13 @@
             "type": "string",
             "description": "Null if ad-hoc import"
           },
+          "csvFile": {},
+          "fileId": {
+            "type": "string"
+          },
+          "fileKey": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -4918,6 +4940,11 @@
           },
           "initiatedBy": {
             "type": "string"
+          },
+          "results": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Combined result snapshot (fileInfo, processing, performance)"
           },
           "results.fileInfo": {
             "type": "object",
@@ -4963,13 +4990,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvFile": {},
-          "fileId": {
-            "type": "string"
-          },
-          "fileKey": {
-            "type": "string"
           }
         },
         "required": [
@@ -5045,6 +5065,11 @@
           },
           "owner": {
             "type": "string"
+          },
+          "fieldMappings": {
+            "type": "array",
+            "items": {},
+            "description": "Embedded field mapping rules for this import profile. type:array so the details-component save sanitizer includes it in the save payload (virtual array managed by importFieldMappings child model)."
           }
         },
         "required": [
@@ -5122,6 +5147,11 @@
           },
           "owner": {
             "type": "string"
+          },
+          "fieldMappings": {
+            "type": "array",
+            "items": {},
+            "description": "Embedded field mapping rules for this import profile. type:array so the details-component save sanitizer includes it in the save payload (virtual array managed by importFieldMappings child model)."
           }
         },
         "required": [
@@ -5199,6 +5229,11 @@
           },
           "owner": {
             "type": "string"
+          },
+          "fieldMappings": {
+            "type": "array",
+            "items": {},
+            "description": "Embedded field mapping rules for this import profile. type:array so the details-component save sanitizer includes it in the save payload (virtual array managed by importFieldMappings child model)."
           }
         },
         "required": [
@@ -5277,6 +5312,11 @@
           },
           "owner": {
             "type": "string"
+          },
+          "fieldMappings": {
+            "type": "array",
+            "items": {},
+            "description": "Embedded field mapping rules for this import profile. type:array so the details-component save sanitizer includes it in the save payload (virtual array managed by importFieldMappings child model)."
           }
         },
         "required": [
@@ -5497,7 +5537,7 @@
           "targetField": {
             "type": "string",
             "enum": [],
-            "description": "Field name on the target model"
+            "description": "Field on the import profile target model. Options are loaded from that model definition in the admin UI."
           },
           "isUniqueIdentifier": {
             "type": "boolean",
@@ -5505,11 +5545,7 @@
           },
           "dataType": {
             "type": "string",
-            "description": "Data type of the source field. Links to the dynamic fieldTypes model (V20260526.1). defaultValue is a key string that the runtime resolves to the linked record _id (see dynamic-route-service.applyDefaultValues). Persists dataTypeId + dataTypeKey for listings and filters."
-          },
-          "dataTypeKey": {
-            "type": "string",
-            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
+            "description": " Persists dataTypeId + dataTypeKey for listings and filters."
           },
           "isRequired": {
             "type": "boolean"
@@ -5580,6 +5616,10 @@
               "other"
             ],
             "description": "Explicit lookup default for contacts.type (e.g. Primary). Shown when value source is Explicit and target field is type."
+          },
+          "dataTypeKey": {
+            "type": "string",
+            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
           },
           "explicitContactSource": {
             "type": "string",
@@ -5623,7 +5663,7 @@
           "targetField": {
             "type": "string",
             "enum": [],
-            "description": "Field name on the target model"
+            "description": "Field on the import profile target model. Options are loaded from that model definition in the admin UI."
           },
           "isUniqueIdentifier": {
             "type": "boolean",
@@ -5631,11 +5671,7 @@
           },
           "dataType": {
             "type": "string",
-            "description": "Data type of the source field. Links to the dynamic fieldTypes model (V20260526.1). defaultValue is a key string that the runtime resolves to the linked record _id (see dynamic-route-service.applyDefaultValues). Persists dataTypeId + dataTypeKey for listings and filters."
-          },
-          "dataTypeKey": {
-            "type": "string",
-            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
+            "description": " Persists dataTypeId + dataTypeKey for listings and filters."
           },
           "isRequired": {
             "type": "boolean"
@@ -5706,6 +5742,10 @@
               "other"
             ],
             "description": "Explicit lookup default for contacts.type (e.g. Primary). Shown when value source is Explicit and target field is type."
+          },
+          "dataTypeKey": {
+            "type": "string",
+            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
           },
           "explicitContactSource": {
             "type": "string",
@@ -5749,7 +5789,7 @@
           "targetField": {
             "type": "string",
             "enum": [],
-            "description": "Field name on the target model"
+            "description": "Field on the import profile target model. Options are loaded from that model definition in the admin UI."
           },
           "isUniqueIdentifier": {
             "type": "boolean",
@@ -5757,11 +5797,7 @@
           },
           "dataType": {
             "type": "string",
-            "description": "Data type of the source field. Links to the dynamic fieldTypes model (V20260526.1). defaultValue is a key string that the runtime resolves to the linked record _id (see dynamic-route-service.applyDefaultValues). Persists dataTypeId + dataTypeKey for listings and filters."
-          },
-          "dataTypeKey": {
-            "type": "string",
-            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
+            "description": " Persists dataTypeId + dataTypeKey for listings and filters."
           },
           "isRequired": {
             "type": "boolean"
@@ -5832,6 +5868,10 @@
               "other"
             ],
             "description": "Explicit lookup default for contacts.type (e.g. Primary). Shown when value source is Explicit and target field is type."
+          },
+          "dataTypeKey": {
+            "type": "string",
+            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
           },
           "explicitContactSource": {
             "type": "string",
@@ -5876,7 +5916,7 @@
           "targetField": {
             "type": "string",
             "enum": [],
-            "description": "Field name on the target model"
+            "description": "Field on the import profile target model. Options are loaded from that model definition in the admin UI."
           },
           "isUniqueIdentifier": {
             "type": "boolean",
@@ -5884,11 +5924,7 @@
           },
           "dataType": {
             "type": "string",
-            "description": "Data type of the source field. Links to the dynamic fieldTypes model (V20260526.1). defaultValue is a key string that the runtime resolves to the linked record _id (see dynamic-route-service.applyDefaultValues). Persists dataTypeId + dataTypeKey for listings and filters."
-          },
-          "dataTypeKey": {
-            "type": "string",
-            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
+            "description": " Persists dataTypeId + dataTypeKey for listings and filters."
           },
           "isRequired": {
             "type": "boolean"
@@ -5960,6 +5996,10 @@
             ],
             "description": "Explicit lookup default for contacts.type (e.g. Primary). Shown when value source is Explicit and target field is type."
           },
+          "dataTypeKey": {
+            "type": "string",
+            "description": "Human-readable field type key (fieldTypes.key). Written alongside dataType link via denormalizeKey."
+          },
           "explicitContactSource": {
             "type": "string",
             "enum": [
@@ -5999,6 +6039,9 @@
             "type": "string",
             "description": "Null if ad-hoc export"
           },
+          "csvExportFilePath": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -6071,9 +6114,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvExportFilePath": {
-            "type": "string"
           }
         },
         "required": [
@@ -6092,6 +6132,9 @@
             "type": "string",
             "description": "Null if ad-hoc export"
           },
+          "csvExportFilePath": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -6164,9 +6207,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvExportFilePath": {
-            "type": "string"
           }
         },
         "required": [
@@ -6185,6 +6225,9 @@
             "type": "string",
             "description": "Null if ad-hoc export"
           },
+          "csvExportFilePath": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -6257,9 +6300,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvExportFilePath": {
-            "type": "string"
           }
         },
         "required": [
@@ -6279,6 +6319,9 @@
             "type": "string",
             "description": "Null if ad-hoc export"
           },
+          "csvExportFilePath": {
+            "type": "string"
+          },
           "jobId": {
             "type": "string",
             "description": "Links to job history"
@@ -6351,9 +6394,6 @@
           "logFile": {
             "type": "string",
             "description": "Path to log file"
-          },
-          "csvExportFilePath": {
-            "type": "string"
           }
         },
         "required": [
@@ -7091,8 +7131,8 @@
             "format": "date-time"
           },
           "scope": {
-            "type": "array",
-            "items": {}
+            "type": "object",
+            "additionalProperties": true
           },
           "historyId": {
             "type": "string"
@@ -7105,14 +7145,17 @@
             "type": "string",
             "format": "date-time"
           },
-          "customerId": {
-            "type": "string",
-            "description": "External customer/realm id for vendors that need one (e.g. QuickBooks)."
+          "accountKey": {
+            "type": "string"
           },
-          "metadata": {
+          "fullSyncCompletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "syncProgress": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Free-form per-vendor metadata (e.g. Meta page access tokens keyed by page id)."
+            "description": "Live sync progress written by the Gmail sync loop: { synced, total, heartbeatAt }"
           }
         },
         "required": [
@@ -7146,8 +7189,8 @@
             "format": "date-time"
           },
           "scope": {
-            "type": "array",
-            "items": {}
+            "type": "object",
+            "additionalProperties": true
           },
           "historyId": {
             "type": "string"
@@ -7160,14 +7203,17 @@
             "type": "string",
             "format": "date-time"
           },
-          "customerId": {
-            "type": "string",
-            "description": "External customer/realm id for vendors that need one (e.g. QuickBooks)."
+          "accountKey": {
+            "type": "string"
           },
-          "metadata": {
+          "fullSyncCompletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "syncProgress": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Free-form per-vendor metadata (e.g. Meta page access tokens keyed by page id)."
+            "description": "Live sync progress written by the Gmail sync loop: { synced, total, heartbeatAt }"
           }
         },
         "required": [
@@ -7201,8 +7247,8 @@
             "format": "date-time"
           },
           "scope": {
-            "type": "array",
-            "items": {}
+            "type": "object",
+            "additionalProperties": true
           },
           "historyId": {
             "type": "string"
@@ -7215,14 +7261,17 @@
             "type": "string",
             "format": "date-time"
           },
-          "customerId": {
-            "type": "string",
-            "description": "External customer/realm id for vendors that need one (e.g. QuickBooks)."
+          "accountKey": {
+            "type": "string"
           },
-          "metadata": {
+          "fullSyncCompletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "syncProgress": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Free-form per-vendor metadata (e.g. Meta page access tokens keyed by page id)."
+            "description": "Live sync progress written by the Gmail sync loop: { synced, total, heartbeatAt }"
           }
         },
         "required": [
@@ -7257,8 +7306,8 @@
             "format": "date-time"
           },
           "scope": {
-            "type": "array",
-            "items": {}
+            "type": "object",
+            "additionalProperties": true
           },
           "historyId": {
             "type": "string"
@@ -7271,14 +7320,17 @@
             "type": "string",
             "format": "date-time"
           },
-          "customerId": {
-            "type": "string",
-            "description": "External customer/realm id for vendors that need one (e.g. QuickBooks)."
+          "accountKey": {
+            "type": "string"
           },
-          "metadata": {
+          "fullSyncCompletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "syncProgress": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Free-form per-vendor metadata (e.g. Meta page access tokens keyed by page id)."
+            "description": "Live sync progress written by the Gmail sync loop: { synced, total, heartbeatAt }"
           }
         },
         "required": [
@@ -7627,11 +7679,5 @@
   },
   "x-warnings": [
     "Unknown field type 'fileUpload' on field 'csvFile', emitting permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
   ]
 }

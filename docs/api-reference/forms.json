@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Forms API",
+    "title": "forms API",
     "version": "0.0.0",
-    "description": "Dynamic form definitions and field configurations tied to any Enterprise model."
+    "description": "CRUD endpoints for models owned by the `forms` module."
   },
   "paths": {
     "/api/forms/forms": {
@@ -431,13 +431,13 @@
             "type": "string",
             "description": "Optional URL to redirect the visitor to after submitting"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded form field definitions — virtual-array child of formFields model"
           }
         },
         "required": [
@@ -445,9 +445,7 @@
           "key",
           "status",
           "submitButtonText",
-          "successMessage",
-          "createdByDate",
-          "updatedByDate"
+          "successMessage"
         ]
       },
       "FormFilter": {
@@ -482,13 +480,13 @@
             "type": "string",
             "description": "Optional URL to redirect the visitor to after submitting"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded form field definitions — virtual-array child of formFields model"
           }
         },
         "required": [
@@ -496,9 +494,7 @@
           "key",
           "status",
           "submitButtonText",
-          "successMessage",
-          "createdByDate",
-          "updatedByDate"
+          "successMessage"
         ]
       },
       "CreateFormInput": {
@@ -533,13 +529,13 @@
             "type": "string",
             "description": "Optional URL to redirect the visitor to after submitting"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded form field definitions — virtual-array child of formFields model"
           }
         },
         "required": [
@@ -547,9 +543,7 @@
           "key",
           "status",
           "submitButtonText",
-          "successMessage",
-          "createdByDate",
-          "updatedByDate"
+          "successMessage"
         ],
         "description": "Auto-generated createInput for Form"
       },
@@ -585,13 +579,13 @@
             "type": "string",
             "description": "Optional URL to redirect the visitor to after submitting"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded form field definitions — virtual-array child of formFields model"
           }
         },
         "required": [
@@ -599,33 +593,32 @@
           "key",
           "status",
           "submitButtonText",
-          "successMessage",
-          "createdByDate",
-          "updatedByDate"
+          "successMessage"
         ],
         "description": "Auto-generated updateInput for Form"
       },
       "FormField": {
         "type": "object",
         "properties": {
+          "parentRecordId": {
+            "type": "string",
+            "description": "ID of the parent forms document this field belongs to"
+          },
           "name": {
             "type": "string",
             "description": "Visible label for the field shown to form respondents"
           },
           "key": {
-            "type": "string"
-          },
-          "form": {
             "type": "string",
-            "description": "Parent form this field belongs to"
+            "description": "Programmatic key for this field (auto-derived from label)"
           },
           "fieldType": {
             "type": "string",
-            "description": "Which input is rendered for this form field. Links to fieldTypes (V20260526.1). Stored as `fieldType` (ObjectId). The details form uses `fieldTypeId` / `fieldTypeKey` in UI state (denormalizeKey); normalizeLinkFieldsForSave maps Id \u2192 `fieldType` and does not persist companions. Choice Options visibility compares `fieldTypeKey` in form state (hydrated on load). The Form Details Fields listing reads `fieldType` and hydrates the link for display."
+            "description": "Which input is rendered for this form field"
           },
           "order": {
             "type": "number",
-            "description": "Position of this field within the form. New fields default to 1."
+            "description": "Position of this field within the form"
           },
           "placeholder": {
             "type": "string",
@@ -644,47 +637,37 @@
           "options": {
             "type": "string",
             "description": "JSON array of { label, value } pairs (used by select / radio / checkbox)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
+          "parentRecordId",
           "name",
-          "key",
-          "form",
           "fieldType",
-          "order",
-          "createdByDate",
-          "updatedByDate"
+          "order"
         ]
       },
       "FormFieldFilter": {
         "type": "object",
         "properties": {
+          "parentRecordId": {
+            "type": "string",
+            "description": "ID of the parent forms document this field belongs to"
+          },
           "name": {
             "type": "string",
             "description": "Visible label for the field shown to form respondents"
           },
           "key": {
-            "type": "string"
-          },
-          "form": {
             "type": "string",
-            "description": "Parent form this field belongs to"
+            "description": "Programmatic key for this field (auto-derived from label)"
           },
           "fieldType": {
             "type": "string",
-            "description": "Which input is rendered for this form field. Links to fieldTypes (V20260526.1). Stored as `fieldType` (ObjectId). The details form uses `fieldTypeId` / `fieldTypeKey` in UI state (denormalizeKey); normalizeLinkFieldsForSave maps Id \u2192 `fieldType` and does not persist companions. Choice Options visibility compares `fieldTypeKey` in form state (hydrated on load). The Form Details Fields listing reads `fieldType` and hydrates the link for display."
+            "description": "Which input is rendered for this form field"
           },
           "order": {
             "type": "number",
-            "description": "Position of this field within the form. New fields default to 1."
+            "description": "Position of this field within the form"
           },
           "placeholder": {
             "type": "string",
@@ -703,47 +686,37 @@
           "options": {
             "type": "string",
             "description": "JSON array of { label, value } pairs (used by select / radio / checkbox)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
+          "parentRecordId",
           "name",
-          "key",
-          "form",
           "fieldType",
-          "order",
-          "createdByDate",
-          "updatedByDate"
+          "order"
         ]
       },
       "CreateFormFieldInput": {
         "type": "object",
         "properties": {
+          "parentRecordId": {
+            "type": "string",
+            "description": "ID of the parent forms document this field belongs to"
+          },
           "name": {
             "type": "string",
             "description": "Visible label for the field shown to form respondents"
           },
           "key": {
-            "type": "string"
-          },
-          "form": {
             "type": "string",
-            "description": "Parent form this field belongs to"
+            "description": "Programmatic key for this field (auto-derived from label)"
           },
           "fieldType": {
             "type": "string",
-            "description": "Which input is rendered for this form field. Links to fieldTypes (V20260526.1). Stored as `fieldType` (ObjectId). The details form uses `fieldTypeId` / `fieldTypeKey` in UI state (denormalizeKey); normalizeLinkFieldsForSave maps Id \u2192 `fieldType` and does not persist companions. Choice Options visibility compares `fieldTypeKey` in form state (hydrated on load). The Form Details Fields listing reads `fieldType` and hydrates the link for display."
+            "description": "Which input is rendered for this form field"
           },
           "order": {
             "type": "number",
-            "description": "Position of this field within the form. New fields default to 1."
+            "description": "Position of this field within the form"
           },
           "placeholder": {
             "type": "string",
@@ -762,48 +735,38 @@
           "options": {
             "type": "string",
             "description": "JSON array of { label, value } pairs (used by select / radio / checkbox)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
+          "parentRecordId",
           "name",
-          "key",
-          "form",
           "fieldType",
-          "order",
-          "createdByDate",
-          "updatedByDate"
+          "order"
         ],
         "description": "Auto-generated createInput for FormField"
       },
       "UpdateFormFieldInput": {
         "type": "object",
         "properties": {
+          "parentRecordId": {
+            "type": "string",
+            "description": "ID of the parent forms document this field belongs to"
+          },
           "name": {
             "type": "string",
             "description": "Visible label for the field shown to form respondents"
           },
           "key": {
-            "type": "string"
-          },
-          "form": {
             "type": "string",
-            "description": "Parent form this field belongs to"
+            "description": "Programmatic key for this field (auto-derived from label)"
           },
           "fieldType": {
             "type": "string",
-            "description": "Which input is rendered for this form field. Links to fieldTypes (V20260526.1). Stored as `fieldType` (ObjectId). The details form uses `fieldTypeId` / `fieldTypeKey` in UI state (denormalizeKey); normalizeLinkFieldsForSave maps Id \u2192 `fieldType` and does not persist companions. Choice Options visibility compares `fieldTypeKey` in form state (hydrated on load). The Form Details Fields listing reads `fieldType` and hydrates the link for display."
+            "description": "Which input is rendered for this form field"
           },
           "order": {
             "type": "number",
-            "description": "Position of this field within the form. New fields default to 1."
+            "description": "Position of this field within the form"
           },
           "placeholder": {
             "type": "string",
@@ -822,33 +785,16 @@
           "options": {
             "type": "string",
             "description": "JSON array of { label, value } pairs (used by select / radio / checkbox)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
+          "parentRecordId",
           "name",
-          "key",
-          "form",
           "fieldType",
-          "order",
-          "createdByDate",
-          "updatedByDate"
+          "order"
         ],
         "description": "Auto-generated updateInput for FormField"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

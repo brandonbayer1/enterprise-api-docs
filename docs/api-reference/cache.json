@@ -3,7 +3,7 @@
   "info": {
     "title": "Cache API",
     "version": "1.0.7",
-    "description": "Shared caching layer \u2014 read, write, invalidate, and configure TTLs for cached entries across the platform.\n\n## Sections\n\n- [Cache](/api/cache/tag/cache)"
+    "description": "OpenAPI 3.1 document for the `cache` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -629,19 +629,13 @@
     }
   },
   "x-warnings": [
-    "Unresolved type 'ICacheConfig' \u2192 emitted permissive schema {}",
-    "Unresolved type 'IContentCacheResult' \u2192 emitted permissive schema {}",
-    "Unresolved type 'IDataCacheResult' \u2192 emitted permissive schema {}",
-    "Unresolved type 'DataType' \u2192 emitted permissive schema {}",
-    "Unresolved type 'IBatchCacheCheckResult' \u2192 emitted permissive schema {}",
-    "Unresolved type 'ICacheCheckResult' \u2192 emitted permissive schema {}",
-    "Unresolvable type '(url: string) => Promise<IContentCacheResult>' \u2192 emitted permissive schema {}",
-    "Unsupported generic 'Map<DataType, string[]>' \u2192 emitted permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
+    "Unresolved type 'ICacheConfig' → emitted permissive schema {}",
+    "Unresolved type 'IContentCacheResult' → emitted permissive schema {}",
+    "Unresolved type 'IDataCacheResult' → emitted permissive schema {}",
+    "Unresolved type 'DataType' → emitted permissive schema {}",
+    "Unresolved type 'IBatchCacheCheckResult' → emitted permissive schema {}",
+    "Unresolved type 'ICacheCheckResult' → emitted permissive schema {}",
+    "Unresolvable type '(url: string) => Promise<IContentCacheResult>' → emitted permissive schema {}",
+    "Unsupported generic 'Map<DataType, string[]>' → emitted permissive schema {}"
   ]
 }

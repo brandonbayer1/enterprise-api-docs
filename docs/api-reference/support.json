@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Support API",
+    "title": "support API",
     "version": "0.0.0",
-    "description": "Support documentation management \u2014 articles, FAQs, and knowledge base content."
+    "description": "CRUD endpoints for models owned by the `support` module."
   },
   "paths": {
     "/api/support/supportDocumentationPages": {
@@ -262,21 +262,11 @@
               "additionalProperties": true
             },
             "description": "Hand-curated cards shown in the \"Related articles\" section at the bottom of the page. Each entry links to another doc page by its relative URL."
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "SupportDocumentationPageFilter": {
@@ -337,21 +327,11 @@
               "additionalProperties": true
             },
             "description": "Hand-curated cards shown in the \"Related articles\" section at the bottom of the page. Each entry links to another doc page by its relative URL."
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "CreateSupportDocumentationPageInput": {
@@ -412,21 +392,11 @@
               "additionalProperties": true
             },
             "description": "Hand-curated cards shown in the \"Related articles\" section at the bottom of the page. Each entry links to another doc page by its relative URL."
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated createInput for SupportDocumentationPage"
       },
@@ -488,30 +458,14 @@
               "additionalProperties": true
             },
             "description": "Hand-curated cards shown in the \"Related articles\" section at the bottom of the page. Each entry links to another doc page by its relative URL."
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated updateInput for SupportDocumentationPage"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

@@ -1,0 +1,81 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Mcp API",
+    "version": "1.0.0",
+    "description": "OpenAPI 3.1 document for the `mcp` module, generated from Enterprise module interface specifications."
+  },
+  "tags": [
+    {
+      "name": "Mcpinfo"
+    }
+  ],
+  "paths": {
+    "/api/mcp/info": {
+      "get": {
+        "operationId": "mcp.mcpinfo.info",
+        "tags": [
+          "Mcpinfo"
+        ],
+        "summary": "Info",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpInfoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "mcp:mcpinfo:read"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "McpInfoResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "toolCount": {
+            "type": "number",
+            "description": "Number of tools currently exposed (read from the generated manifest)."
+          },
+          "transport": {
+            "type": "string",
+            "enum": [
+              "streamable-http"
+            ],
+            "description": "MCP transport in use."
+          },
+          "endpoint": {
+            "type": "string",
+            "description": "Public endpoint clients should connect to."
+          }
+        },
+        "required": [
+          "name",
+          "version",
+          "toolCount",
+          "transport",
+          "endpoint"
+        ]
+      }
+    }
+  }
+}

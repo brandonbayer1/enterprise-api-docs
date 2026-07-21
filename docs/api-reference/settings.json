@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Settings API",
+    "title": "settings API",
     "version": "0.0.0",
-    "description": "Per-account configuration \u2014 notification preferences, security policies, and feature-scoping rules."
+    "description": "CRUD endpoints for models owned by the `settings` module."
   },
   "paths": {
     "/api/settings/notificationSettings": {
@@ -1117,11 +1117,5 @@
         "description": "Auto-generated updateInput for SettingScope"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

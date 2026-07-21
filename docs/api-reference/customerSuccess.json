@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Customer Success API",
+    "title": "customerSuccess API",
     "version": "0.0.0",
-    "description": "Post-sale customer relationship management: renewals, health scores, success plans, and escalation tracking."
+    "description": "CRUD endpoints for models owned by the `customerSuccess` module."
   },
   "paths": {
     "/api/customerSuccess/renewals": {
@@ -889,23 +889,13 @@
               "closed_renewed",
               "closed_churn"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
           "key",
           "account",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "RenewalFilter": {
@@ -1008,23 +998,13 @@
               "closed_renewed",
               "closed_churn"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
           "key",
           "account",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "CreateRenewalInput": {
@@ -1127,23 +1107,13 @@
               "closed_renewed",
               "closed_churn"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
           "key",
           "account",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated createInput for Renewal"
       },
@@ -1247,23 +1217,13 @@
               "closed_renewed",
               "closed_churn"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
           "key",
           "account",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated updateInput for Renewal"
       },
@@ -1276,16 +1236,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "RenewalNoteFilter": {
@@ -1297,16 +1252,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CreateRenewalNoteInput": {
@@ -1318,16 +1268,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated createInput for RenewalNote"
       },
@@ -1340,16 +1285,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated updateInput for RenewalNote"
       },
@@ -1362,16 +1302,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "RenewalFileFilter": {
@@ -1383,16 +1318,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateRenewalFileInput": {
@@ -1404,16 +1334,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for RenewalFile"
       },
@@ -1426,16 +1351,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for RenewalFile"
       },
@@ -1448,16 +1368,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "RenewalTaskFilter": {
@@ -1469,16 +1384,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CreateRenewalTaskInput": {
@@ -1490,16 +1400,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated createInput for RenewalTask"
       },
@@ -1512,25 +1417,14 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "renewal",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated updateInput for RenewalTask"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

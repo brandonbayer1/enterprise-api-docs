@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Communications API",
-    "version": "1.0.19",
-    "description": "All outbound and inbound messaging: transactional email, bulk sends, campaign email, Gmail integration, conversations, and file uploads.\n\n## Sections\n\n- [Bulk Email](/api/communications/tag/bulk-email)\n- [Campaign Email](/api/communications/tag/campaign-email)\n- [Campaign Emails](/api/communications/tag/campaign-emails)\n- [Campaign Files](/api/communications/tag/campaign-files)\n- [Campaign Notes](/api/communications/tag/campaign-notes)\n- [Campaign Tasks](/api/communications/tag/campaign-tasks)\n- [Campaigns](/api/communications/tag/campaigns)\n- [Comments](/api/communications/tag/comments)\n- [Conversation](/api/communications/tag/conversation)\n- [Conversations](/api/communications/tag/conversations)\n- [Email Analytics](/api/communications/tag/email-analytics)\n- [Email Files](/api/communications/tag/email-files)\n- [Email Lists](/api/communications/tag/email-lists)\n- [Email Scheduling](/api/communications/tag/email-scheduling)\n- [Email Snapshot](/api/communications/tag/email-snapshot)\n- [Email Snapshot Contacts](/api/communications/tag/email-snapshot-contacts)\n- [Email Snapshots](/api/communications/tag/email-snapshots)\n- [Email Templates](/api/communications/tag/email-templates)\n- [Emails](/api/communications/tag/emails)\n- [File Upload](/api/communications/tag/file-upload)\n- [Gmail Connection](/api/communications/tag/gmail-connection)\n- [Gmail Send](/api/communications/tag/gmail-send)\n- [Gmail Sync](/api/communications/tag/gmail-sync)\n- [Referrals](/api/communications/tag/referrals)\n- [Send Email](/api/communications/tag/send-email)"
+    "version": "1.0.24",
+    "description": "OpenAPI 3.1 document for the `communications` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -43,9 +43,6 @@
       "name": "Email Files"
     },
     {
-      "name": "Email Lists"
-    },
-    {
       "name": "Email Scheduling"
     },
     {
@@ -77,6 +74,18 @@
     },
     {
       "name": "Referrals"
+    },
+    {
+      "name": "Segment Files"
+    },
+    {
+      "name": "Segment Notes"
+    },
+    {
+      "name": "Segment Tasks"
+    },
+    {
+      "name": "Segments"
     },
     {
       "name": "Send Email"
@@ -587,7 +596,7 @@
         "tags": [
           "Campaign Email"
         ],
-        "summary": "Update and send campaign email immediately",
+        "summary": "Update and send campaign email by enqueuing a background job",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -620,6 +629,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "accountKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -632,7 +649,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "communications:campaignemail:write",
-        "description": "Update and send campaign email immediately"
+        "description": "Update and send campaign email by enqueuing a background job"
       }
     },
     "/api/communications/campaign-emails/create-and-send": {
@@ -641,7 +658,7 @@
         "tags": [
           "Campaign Email"
         ],
-        "summary": "Create and send campaign email immediately",
+        "summary": "Create and send campaign email by enqueuing a background job",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -666,6 +683,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "accountKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -678,7 +703,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "communications:campaignemail:write",
-        "description": "Create and send campaign email immediately"
+        "description": "Create and send campaign email by enqueuing a background job"
       }
     },
     "/api/communications/campaign-emails/create-and-schedule": {
@@ -1091,6 +1116,36 @@
         "x-scope": "clientServer",
         "x-permission": "communications:emailsnapshot:write",
         "description": "Mark snapshot as completed"
+      }
+    },
+    "/api/communications/api/email/provider": {
+      "get": {
+        "operationId": "communications.sendemail.getEmailProvider",
+        "tags": [
+          "Send Email"
+        ],
+        "summary": "Get Email Provider",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:sendemail:read"
       }
     },
     "/api/communications/api/email/send": {
@@ -1684,6 +1739,63 @@
         "description": "Get conversations for a specific entity (contact, account, opportunity)."
       }
     },
+    "/api/communications/conversations/by-parent": {
+      "get": {
+        "operationId": "communications.conversation.getConversationsByParent",
+        "tags": [
+          "Conversation"
+        ],
+        "summary": "Get conversations for any record via the polymorphic parent scope (issue #474)",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentModel",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentRecordId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:conversation:read",
+        "description": "Get conversations for any record via the polymorphic parent scope (issue #474).\nWorks for every model without a per-entity from*Id field."
+      }
+    },
     "/api/communications/files/upload": {
       "post": {
         "operationId": "communications.fileupload.uploadFile",
@@ -1723,7 +1835,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "communications:fileupload:write",
-        "description": "Upload a file and save a record to the files collection.\nAlways creates a new record \u2014 use upsertFile for Gmail sync where\nthe same attachment may be downloaded more than once."
+        "description": "Upload a file and save a record to the files collection.\nAlways creates a new record — use upsertFile for Gmail sync where\nthe same attachment may be downloaded more than once."
       }
     },
     "/api/communications/files/{fileId}": {
@@ -1824,7 +1936,7 @@
         "tags": [
           "Gmail Connection"
         ],
-        "summary": "Handle OAuth callback \u2014 stores tokens in syncVendors",
+        "summary": "Handle OAuth callback — stores tokens in syncVendors",
         "responses": {
           "204": {
             "description": "No content"
@@ -1838,7 +1950,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "communications:gmailconnection:read",
-        "description": "Handle OAuth callback \u2014 stores tokens in syncVendors"
+        "description": "Handle OAuth callback — stores tokens in syncVendors"
       }
     },
     "/api/communications/gmail/disconnect": {
@@ -1847,7 +1959,7 @@
         "tags": [
           "Gmail Connection"
         ],
-        "summary": "Disconnect Gmail \u2014 clears syncVendors record",
+        "summary": "Disconnect Gmail — clears syncVendors record",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -1880,7 +1992,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "communications:gmailconnection:write",
-        "description": "Disconnect Gmail \u2014 clears syncVendors record"
+        "description": "Disconnect Gmail — clears syncVendors record"
       }
     },
     "/api/communications/gmail/connection-status": {
@@ -2678,11 +2790,11 @@
         "x-permission": "communications:campaigns:delete"
       }
     },
-    "/api/communications/emailLists": {
+    "/api/communications/segments": {
       "get": {
-        "operationId": "communications.emailLists.query",
+        "operationId": "communications.segments.query",
         "tags": [
-          "Email Lists"
+          "Segments"
         ],
         "summary": "Query",
         "responses": {
@@ -2693,7 +2805,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/EmailList"
+                    "$ref": "#/components/schemas/Segment"
                   }
                 }
               }
@@ -2712,17 +2824,17 @@
             "in": "query",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/EmailListFilter"
+              "$ref": "#/components/schemas/SegmentFilter"
             }
           }
         ],
         "x-scope": "clientServer",
-        "x-permission": "communications:emailLists:read"
+        "x-permission": "communications:segments:read"
       },
       "post": {
-        "operationId": "communications.emailLists.create",
+        "operationId": "communications.segments.create",
         "tags": [
-          "Email Lists"
+          "Segments"
         ],
         "summary": "Create",
         "responses": {
@@ -2731,7 +2843,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmailList"
+                  "$ref": "#/components/schemas/Segment"
                 }
               }
             }
@@ -2748,20 +2860,20 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateEmailListInput"
+                "$ref": "#/components/schemas/CreateSegmentInput"
               }
             }
           }
         },
         "x-scope": "clientServer",
-        "x-permission": "communications:emailLists:write"
+        "x-permission": "communications:segments:write"
       }
     },
-    "/api/communications/emailLists/{id}": {
+    "/api/communications/segments/{id}": {
       "get": {
-        "operationId": "communications.emailLists.getById",
+        "operationId": "communications.segments.getById",
         "tags": [
-          "Email Lists"
+          "Segments"
         ],
         "summary": "Get By Id",
         "responses": {
@@ -2770,7 +2882,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmailList"
+                  "$ref": "#/components/schemas/Segment"
                 }
               }
             }
@@ -2793,12 +2905,12 @@
           }
         ],
         "x-scope": "clientServer",
-        "x-permission": "communications:emailLists:read"
+        "x-permission": "communications:segments:read"
       },
       "put": {
-        "operationId": "communications.emailLists.update",
+        "operationId": "communications.segments.update",
         "tags": [
-          "Email Lists"
+          "Segments"
         ],
         "summary": "Update",
         "responses": {
@@ -2807,7 +2919,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmailList"
+                  "$ref": "#/components/schemas/Segment"
                 }
               }
             }
@@ -2834,18 +2946,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateEmailListInput"
+                "$ref": "#/components/schemas/UpdateSegmentInput"
               }
             }
           }
         },
         "x-scope": "clientServer",
-        "x-permission": "communications:emailLists:write"
+        "x-permission": "communications:segments:write"
       },
       "delete": {
-        "operationId": "communications.emailLists.delete",
+        "operationId": "communications.segments.delete",
         "tags": [
-          "Email Lists"
+          "Segments"
         ],
         "summary": "Delete",
         "responses": {
@@ -2870,7 +2982,7 @@
           }
         ],
         "x-scope": "clientServer",
-        "x-permission": "communications:emailLists:delete"
+        "x-permission": "communications:segments:delete"
       }
     },
     "/api/communications/emailTemplates": {
@@ -4822,6 +4934,591 @@
         "x-scope": "clientServer",
         "x-permission": "communications:campaignTasks:delete"
       }
+    },
+    "/api/communications/segmentNotes": {
+      "get": {
+        "operationId": "communications.segmentNotes.query",
+        "tags": [
+          "Segment Notes"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SegmentNote"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SegmentNoteFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentNotes:read"
+      },
+      "post": {
+        "operationId": "communications.segmentNotes.create",
+        "tags": [
+          "Segment Notes"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentNote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSegmentNoteInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentNotes:write"
+      }
+    },
+    "/api/communications/segmentNotes/{id}": {
+      "get": {
+        "operationId": "communications.segmentNotes.getById",
+        "tags": [
+          "Segment Notes"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentNote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentNotes:read"
+      },
+      "put": {
+        "operationId": "communications.segmentNotes.update",
+        "tags": [
+          "Segment Notes"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentNote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSegmentNoteInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentNotes:write"
+      },
+      "delete": {
+        "operationId": "communications.segmentNotes.delete",
+        "tags": [
+          "Segment Notes"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentNotes:delete"
+      }
+    },
+    "/api/communications/segmentFiles": {
+      "get": {
+        "operationId": "communications.segmentFiles.query",
+        "tags": [
+          "Segment Files"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SegmentFile"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SegmentFileFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentFiles:read"
+      },
+      "post": {
+        "operationId": "communications.segmentFiles.create",
+        "tags": [
+          "Segment Files"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSegmentFileInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentFiles:write"
+      }
+    },
+    "/api/communications/segmentFiles/{id}": {
+      "get": {
+        "operationId": "communications.segmentFiles.getById",
+        "tags": [
+          "Segment Files"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentFiles:read"
+      },
+      "put": {
+        "operationId": "communications.segmentFiles.update",
+        "tags": [
+          "Segment Files"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSegmentFileInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentFiles:write"
+      },
+      "delete": {
+        "operationId": "communications.segmentFiles.delete",
+        "tags": [
+          "Segment Files"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentFiles:delete"
+      }
+    },
+    "/api/communications/segmentTasks": {
+      "get": {
+        "operationId": "communications.segmentTasks.query",
+        "tags": [
+          "Segment Tasks"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SegmentTask"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SegmentTaskFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentTasks:read"
+      },
+      "post": {
+        "operationId": "communications.segmentTasks.create",
+        "tags": [
+          "Segment Tasks"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSegmentTaskInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentTasks:write"
+      }
+    },
+    "/api/communications/segmentTasks/{id}": {
+      "get": {
+        "operationId": "communications.segmentTasks.getById",
+        "tags": [
+          "Segment Tasks"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentTasks:read"
+      },
+      "put": {
+        "operationId": "communications.segmentTasks.update",
+        "tags": [
+          "Segment Tasks"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSegmentTaskInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentTasks:write"
+      },
+      "delete": {
+        "operationId": "communications.segmentTasks.delete",
+        "tags": [
+          "Segment Tasks"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "communications:segmentTasks:delete"
+      }
     }
   },
   "components": {
@@ -4956,6 +5653,24 @@
             "items": {
               "$ref": "#/components/schemas/EmailAttachment"
             }
+          },
+          "recipientVariables": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "description": "Per-recipient template variables for Mailgun batch sends. Key is the recipient email address."
+          },
+          "trackOpens": {
+            "type": "boolean",
+            "description": "Enable Mailgun open tracking (o:tracking-opens). Omit to leave the domain default untouched."
+          },
+          "trackClicks": {
+            "type": "boolean",
+            "description": "Enable Mailgun click tracking (o:tracking-clicks). Omit to leave the domain default untouched."
           }
         },
         "required": [
@@ -5067,6 +5782,14 @@
           },
           "fromOpportunityId": {
             "type": "string"
+          },
+          "parentModel": {
+            "type": "string",
+            "description": "Polymorphic parent scope (issue #474) — modelKey of the parent record."
+          },
+          "parentRecordId": {
+            "type": "string",
+            "description": "Polymorphic parent scope (issue #474) — _id (as string) of the parent record."
           },
           "messages": {
             "type": "array",
@@ -5184,6 +5907,30 @@
           },
           "supportTicket": {
             "type": "string"
+          },
+          "fromProductId": {
+            "type": "string"
+          },
+          "fromQuoteId": {
+            "type": "string"
+          },
+          "fromSegmentId": {
+            "type": "string"
+          },
+          "fromCampaignId": {
+            "type": "string"
+          },
+          "fromCampaignChannelId": {
+            "type": "string"
+          },
+          "fromCampaignChannelTypeKey": {
+            "type": "string"
+          },
+          "parentModel": {
+            "description": "modelKey of the parent record this conversation is scoped to (polymorphic)"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this conversation is scoped to (polymorphic)"
           }
         },
         "required": [
@@ -5198,7 +5945,15 @@
           "unreadMessagesCount",
           "lastMessageDate",
           "production",
-          "supportTicket"
+          "supportTicket",
+          "fromProductId",
+          "fromQuoteId",
+          "fromSegmentId",
+          "fromCampaignId",
+          "fromCampaignChannelId",
+          "fromCampaignChannelTypeKey",
+          "parentModel",
+          "parentRecordId"
         ]
       },
       "CreateConversationInput": {
@@ -5246,6 +6001,30 @@
           },
           "supportTicket": {
             "type": "string"
+          },
+          "fromProductId": {
+            "type": "string"
+          },
+          "fromQuoteId": {
+            "type": "string"
+          },
+          "fromSegmentId": {
+            "type": "string"
+          },
+          "fromCampaignId": {
+            "type": "string"
+          },
+          "fromCampaignChannelId": {
+            "type": "string"
+          },
+          "fromCampaignChannelTypeKey": {
+            "type": "string"
+          },
+          "parentModel": {
+            "description": "modelKey of the parent record this conversation is scoped to (polymorphic)"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this conversation is scoped to (polymorphic)"
           }
         },
         "required": [
@@ -5260,7 +6039,15 @@
           "unreadMessagesCount",
           "lastMessageDate",
           "production",
-          "supportTicket"
+          "supportTicket",
+          "fromProductId",
+          "fromQuoteId",
+          "fromSegmentId",
+          "fromCampaignId",
+          "fromCampaignChannelId",
+          "fromCampaignChannelTypeKey",
+          "parentModel",
+          "parentRecordId"
         ],
         "description": "Auto-generated createInput for Conversation"
       },
@@ -5309,6 +6096,30 @@
           },
           "supportTicket": {
             "type": "string"
+          },
+          "fromProductId": {
+            "type": "string"
+          },
+          "fromQuoteId": {
+            "type": "string"
+          },
+          "fromSegmentId": {
+            "type": "string"
+          },
+          "fromCampaignId": {
+            "type": "string"
+          },
+          "fromCampaignChannelId": {
+            "type": "string"
+          },
+          "fromCampaignChannelTypeKey": {
+            "type": "string"
+          },
+          "parentModel": {
+            "description": "modelKey of the parent record this conversation is scoped to (polymorphic)"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this conversation is scoped to (polymorphic)"
           }
         },
         "required": [
@@ -5323,7 +6134,15 @@
           "unreadMessagesCount",
           "lastMessageDate",
           "production",
-          "supportTicket"
+          "supportTicket",
+          "fromProductId",
+          "fromQuoteId",
+          "fromSegmentId",
+          "fromCampaignId",
+          "fromCampaignChannelId",
+          "fromCampaignChannelTypeKey",
+          "parentModel",
+          "parentRecordId"
         ],
         "description": "Auto-generated updateInput for Conversation"
       },
@@ -5656,21 +6475,26 @@
           "tags": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
+          "emailLists": {
+            "type": "array",
+            "items": {},
+            "description": "Legacy segment id array — prefer audienceSegments. type:array (not json) so the module-framework sanitizer persists the string[] instead of dropping it. Mirrors emailDripCampaigns.emailLists so a new email drip copies the campaign-level selection on create."
           },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "audienceSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids — the SELECTED (checked) subset of stagedSegments. string[]. type:array (not json) so the module-framework sanitizer persists the string[]. Copied into new email/social drips on create (drips diverge freely afterwards; never re-synced)."
+          },
+          "stagedSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids staged in the segment-list UI (the list shown to the user). audienceSegments is the selected/enrolled subset of these. string[]. type:array (not json) so the module-framework sanitizer persists the string[]."
           }
         },
         "required": [
           "name",
           "status",
-          "objective",
-          "channels",
-          "campaignCode"
+          "channels"
         ]
       },
       "CampaignFilter": {
@@ -5892,21 +6716,26 @@
           "tags": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
+          "emailLists": {
+            "type": "array",
+            "items": {},
+            "description": "Legacy segment id array — prefer audienceSegments. type:array (not json) so the module-framework sanitizer persists the string[] instead of dropping it. Mirrors emailDripCampaigns.emailLists so a new email drip copies the campaign-level selection on create."
           },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "audienceSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids — the SELECTED (checked) subset of stagedSegments. string[]. type:array (not json) so the module-framework sanitizer persists the string[]. Copied into new email/social drips on create (drips diverge freely afterwards; never re-synced)."
+          },
+          "stagedSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids staged in the segment-list UI (the list shown to the user). audienceSegments is the selected/enrolled subset of these. string[]. type:array (not json) so the module-framework sanitizer persists the string[]."
           }
         },
         "required": [
           "name",
           "status",
-          "objective",
-          "channels",
-          "campaignCode"
+          "channels"
         ]
       },
       "CreateCampaignInput": {
@@ -6128,21 +6957,26 @@
           "tags": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
+          "emailLists": {
+            "type": "array",
+            "items": {},
+            "description": "Legacy segment id array — prefer audienceSegments. type:array (not json) so the module-framework sanitizer persists the string[] instead of dropping it. Mirrors emailDripCampaigns.emailLists so a new email drip copies the campaign-level selection on create."
           },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "audienceSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids — the SELECTED (checked) subset of stagedSegments. string[]. type:array (not json) so the module-framework sanitizer persists the string[]. Copied into new email/social drips on create (drips diverge freely afterwards; never re-synced)."
+          },
+          "stagedSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids staged in the segment-list UI (the list shown to the user). audienceSegments is the selected/enrolled subset of these. string[]. type:array (not json) so the module-framework sanitizer persists the string[]."
           }
         },
         "required": [
           "name",
           "status",
-          "objective",
-          "channels",
-          "campaignCode"
+          "channels"
         ],
         "description": "Auto-generated createInput for Campaign"
       },
@@ -6365,25 +7199,30 @@
           "tags": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
+          "emailLists": {
+            "type": "array",
+            "items": {},
+            "description": "Legacy segment id array — prefer audienceSegments. type:array (not json) so the module-framework sanitizer persists the string[] instead of dropping it. Mirrors emailDripCampaigns.emailLists so a new email drip copies the campaign-level selection on create."
           },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
+          "audienceSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids — the SELECTED (checked) subset of stagedSegments. string[]. type:array (not json) so the module-framework sanitizer persists the string[]. Copied into new email/social drips on create (drips diverge freely afterwards; never re-synced)."
+          },
+          "stagedSegments": {
+            "type": "array",
+            "items": {},
+            "description": "Campaign-level segment ids staged in the segment-list UI (the list shown to the user). audienceSegments is the selected/enrolled subset of these. string[]. type:array (not json) so the module-framework sanitizer persists the string[]."
           }
         },
         "required": [
           "name",
           "status",
-          "objective",
-          "channels",
-          "campaignCode"
+          "channels"
         ],
         "description": "Auto-generated updateInput for Campaign"
       },
-      "EmailList": {
+      "Segment": {
         "type": "object",
         "properties": {
           "name": {
@@ -6393,7 +7232,14 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "approved",
+              "active",
+              "inactive",
+              "archived"
+            ]
           },
           "contacts": {
             "type": "string"
@@ -6403,13 +7249,21 @@
           },
           "contactFilters": {
             "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded filter rules: [{ fieldName, operator, value }]"
           }
         },
         "required": [
           "name"
         ]
       },
-      "EmailListFilter": {
+      "SegmentFilter": {
         "type": "object",
         "properties": {
           "name": {
@@ -6419,7 +7273,14 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "approved",
+              "active",
+              "inactive",
+              "archived"
+            ]
           },
           "contacts": {
             "type": "string"
@@ -6429,13 +7290,21 @@
           },
           "contactFilters": {
             "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded filter rules: [{ fieldName, operator, value }]"
           }
         },
         "required": [
           "name"
         ]
       },
-      "CreateEmailListInput": {
+      "CreateSegmentInput": {
         "type": "object",
         "properties": {
           "name": {
@@ -6445,7 +7314,14 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "approved",
+              "active",
+              "inactive",
+              "archived"
+            ]
           },
           "contacts": {
             "type": "string"
@@ -6455,14 +7331,22 @@
           },
           "contactFilters": {
             "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded filter rules: [{ fieldName, operator, value }]"
           }
         },
         "required": [
           "name"
         ],
-        "description": "Auto-generated createInput for EmailList"
+        "description": "Auto-generated createInput for Segment"
       },
-      "UpdateEmailListInput": {
+      "UpdateSegmentInput": {
         "type": "object",
         "properties": {
           "name": {
@@ -6472,7 +7356,14 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "approved",
+              "active",
+              "inactive",
+              "archived"
+            ]
           },
           "contacts": {
             "type": "string"
@@ -6482,12 +7373,20 @@
           },
           "contactFilters": {
             "type": "string"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Embedded filter rules: [{ fieldName, operator, value }]"
           }
         },
         "required": [
           "name"
         ],
-        "description": "Auto-generated updateInput for EmailList"
+        "description": "Auto-generated updateInput for Segment"
       },
       "EmailTemplate": {
         "type": "object",
@@ -7777,6 +8676,15 @@
           "syncedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "attachments": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Array of { filename, mimeType, size, attachmentId } parsed from the Gmail payload by gmail-sync-service. Binaries live in the files collection (linked via emailFiles); this lightweight metadata drives inbox attachment counts and the conversation thread fast-path."
+          },
+          "isSent": {
+            "type": "boolean",
+            "description": "True when this email was sent by the connected mailbox (Gmail SENT label, or logged by gmail-send-service). Drives the inbox Sent tab."
           }
         }
       },
@@ -7858,6 +8766,15 @@
           "syncedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "attachments": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Array of { filename, mimeType, size, attachmentId } parsed from the Gmail payload by gmail-sync-service. Binaries live in the files collection (linked via emailFiles); this lightweight metadata drives inbox attachment counts and the conversation thread fast-path."
+          },
+          "isSent": {
+            "type": "boolean",
+            "description": "True when this email was sent by the connected mailbox (Gmail SENT label, or logged by gmail-send-service). Drives the inbox Sent tab."
           }
         }
       },
@@ -7939,6 +8856,15 @@
           "syncedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "attachments": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Array of { filename, mimeType, size, attachmentId } parsed from the Gmail payload by gmail-sync-service. Binaries live in the files collection (linked via emailFiles); this lightweight metadata drives inbox attachment counts and the conversation thread fast-path."
+          },
+          "isSent": {
+            "type": "boolean",
+            "description": "True when this email was sent by the connected mailbox (Gmail SENT label, or logged by gmail-send-service). Drives the inbox Sent tab."
           }
         },
         "description": "Auto-generated createInput for Email"
@@ -8021,6 +8947,15 @@
           "syncedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "attachments": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Array of { filename, mimeType, size, attachmentId } parsed from the Gmail payload by gmail-sync-service. Binaries live in the files collection (linked via emailFiles); this lightweight metadata drives inbox attachment counts and the conversation thread fast-path."
+          },
+          "isSent": {
+            "type": "boolean",
+            "description": "True when this email was sent by the connected mailbox (Gmail SENT label, or logged by gmail-send-service). Drives the inbox Sent tab."
           }
         },
         "description": "Auto-generated updateInput for Email"
@@ -8055,16 +8990,11 @@
           "gmailMessageId": {
             "type": "string",
             "description": "Gmail message ID this attachment belongs to"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "EmailFileFilter": {
@@ -8097,16 +9027,11 @@
           "gmailMessageId": {
             "type": "string",
             "description": "Gmail message ID this attachment belongs to"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateEmailFileInput": {
@@ -8139,16 +9064,11 @@
           "gmailMessageId": {
             "type": "string",
             "description": "Gmail message ID this attachment belongs to"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for EmailFile"
       },
@@ -8182,16 +9102,11 @@
           "gmailMessageId": {
             "type": "string",
             "description": "Gmail message ID this attachment belongs to"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for EmailFile"
       },
@@ -8219,22 +9134,12 @@
           },
           "segment": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
           "snapshotDate",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "EmailSnapshotFilter": {
@@ -8261,22 +9166,12 @@
           },
           "segment": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
           "snapshotDate",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "CreateEmailSnapshotInput": {
@@ -8303,22 +9198,12 @@
           },
           "segment": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
           "snapshotDate",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated createInput for EmailSnapshot"
       },
@@ -8346,22 +9231,12 @@
           },
           "segment": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "email",
           "snapshotDate",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated updateInput for EmailSnapshot"
       },
@@ -8384,21 +9259,11 @@
               "bounced",
               "unsubscribed"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "emailSnapshot",
-          "contact",
-          "createdByDate",
-          "updatedByDate"
+          "contact"
         ]
       },
       "EmailSnapshotContactFilter": {
@@ -8420,21 +9285,11 @@
               "bounced",
               "unsubscribed"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "emailSnapshot",
-          "contact",
-          "createdByDate",
-          "updatedByDate"
+          "contact"
         ]
       },
       "CreateEmailSnapshotContactInput": {
@@ -8456,21 +9311,11 @@
               "bounced",
               "unsubscribed"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "emailSnapshot",
-          "contact",
-          "createdByDate",
-          "updatedByDate"
+          "contact"
         ],
         "description": "Auto-generated createInput for EmailSnapshotContact"
       },
@@ -8493,21 +9338,11 @@
               "bounced",
               "unsubscribed"
             ]
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "emailSnapshot",
-          "contact",
-          "createdByDate",
-          "updatedByDate"
+          "contact"
         ],
         "description": "Auto-generated updateInput for EmailSnapshotContact"
       },
@@ -8520,16 +9355,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CampaignNoteFilter": {
@@ -8541,16 +9371,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CreateCampaignNoteInput": {
@@ -8562,16 +9387,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated createInput for CampaignNote"
       },
@@ -8584,16 +9404,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated updateInput for CampaignNote"
       },
@@ -8606,16 +9421,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CampaignFileFilter": {
@@ -8627,16 +9437,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateCampaignFileInput": {
@@ -8648,16 +9453,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for CampaignFile"
       },
@@ -8670,16 +9470,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for CampaignFile"
       },
@@ -8692,16 +9487,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CampaignTaskFilter": {
@@ -8713,16 +9503,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CreateCampaignTaskInput": {
@@ -8734,16 +9519,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated createInput for CampaignTask"
       },
@@ -8756,28 +9536,217 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "campaign",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated updateInput for CampaignTask"
+      },
+      "SegmentNote": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this note link belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "note"
+        ]
+      },
+      "SegmentNoteFilter": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this note link belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "note"
+        ]
+      },
+      "CreateSegmentNoteInput": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this note link belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "note"
+        ],
+        "description": "Auto-generated createInput for SegmentNote"
+      },
+      "UpdateSegmentNoteInput": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this note link belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "note"
+        ],
+        "description": "Auto-generated updateInput for SegmentNote"
+      },
+      "SegmentFile": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this file link belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "file"
+        ]
+      },
+      "SegmentFileFilter": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this file link belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "file"
+        ]
+      },
+      "CreateSegmentFileInput": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this file link belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "file"
+        ],
+        "description": "Auto-generated createInput for SegmentFile"
+      },
+      "UpdateSegmentFileInput": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this file link belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "file"
+        ],
+        "description": "Auto-generated updateInput for SegmentFile"
+      },
+      "SegmentTask": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this task link belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "task"
+        ]
+      },
+      "SegmentTaskFilter": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this task link belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "task"
+        ]
+      },
+      "CreateSegmentTaskInput": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this task link belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "task"
+        ],
+        "description": "Auto-generated createInput for SegmentTask"
+      },
+      "UpdateSegmentTaskInput": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string",
+            "description": "Parent segment this task link belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "task"
+        ],
+        "description": "Auto-generated updateInput for SegmentTask"
       }
     }
   },
   "x-warnings": [
+    "Unknown field type 'value' on field 'parentModel', emitting permissive schema {}",
+    "Unknown field type 'value' on field 'parentRecordId', emitting permissive schema {}",
     "Unknown field type 'richText' on field 'content', emitting permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
   ]
 }

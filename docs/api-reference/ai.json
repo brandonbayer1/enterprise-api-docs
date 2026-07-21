@@ -1,19 +1,6808 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "AI API",
-    "version": "1.0.7",
-    "description": "Language model completions, streaming chat, image generation, and image search across OpenAI, Anthropic, and Gemini providers."
+    "title": "Ai API",
+    "version": "1.0.18",
+    "description": "OpenAPI 3.1 document for the `ai` module, generated from Enterprise module interface specifications."
   },
-  "tags": [],
-  "paths": {},
-  "components": {
-    "schemas": {}
-  },
-  "servers": [
+  "tags": [
     {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
+      "name": "Ai Agent Artifacts"
+    },
+    {
+      "name": "Ai Agent Runs"
+    },
+    {
+      "name": "Ai Agent Steps"
+    },
+    {
+      "name": "Ai Agent Workspace Chunks"
+    },
+    {
+      "name": "Ai Agent Workspace Files"
+    },
+    {
+      "name": "Ai Agent Workspace Index Jobs"
+    },
+    {
+      "name": "Ai Agent Workspace Symbols"
+    },
+    {
+      "name": "Ai Agent Workspaces"
+    },
+    {
+      "name": "Ai Agents"
+    },
+    {
+      "name": "Ai Agents Activity"
+    },
+    {
+      "name": "Ai Chat Messages"
+    },
+    {
+      "name": "Ai Chat Threads"
+    },
+    {
+      "name": "Ai Completion Logs"
+    },
+    {
+      "name": "Ai Llm Providers"
+    },
+    {
+      "name": "Ai Llm Providers Activity"
+    },
+    {
+      "name": "Chat"
     }
+  ],
+  "paths": {
+    "/api/ai/models": {
+      "get": {
+        "operationId": "ai.chat.listModels",
+        "tags": [
+          "Chat"
+        ],
+        "summary": "List Models",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModelDescriptor"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "_accountKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        ],
+        "x-scope": "client",
+        "x-permission": "ai:chat:read"
+      }
+    },
+    "/api/ai/chat/threads/{threadId}/messages": {
+      "get": {
+        "operationId": "ai.chat.getThreadMessages",
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Get Thread Messages",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChatMessage"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "threadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "client",
+        "x-permission": "ai:chat:read"
+      }
+    },
+    "/api/ai/chat/complete": {
+      "post": {
+        "operationId": "ai.chat.complete",
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Complete",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatCompleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "x-scope": "client",
+        "x-permission": "ai:chat:write"
+      }
+    },
+    "/api/ai/aiCompletionLogs": {
+      "get": {
+        "operationId": "ai.aiCompletionLogs.query",
+        "tags": [
+          "Ai Completion Logs"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AICompletionLog"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AICompletionLogFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiCompletionLogs:read"
+      },
+      "post": {
+        "operationId": "ai.aiCompletionLogs.create",
+        "tags": [
+          "Ai Completion Logs"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AICompletionLog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAICompletionLogInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiCompletionLogs:write"
+      }
+    },
+    "/api/ai/aiCompletionLogs/{id}": {
+      "get": {
+        "operationId": "ai.aiCompletionLogs.getById",
+        "tags": [
+          "Ai Completion Logs"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AICompletionLog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiCompletionLogs:read"
+      },
+      "put": {
+        "operationId": "ai.aiCompletionLogs.update",
+        "tags": [
+          "Ai Completion Logs"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AICompletionLog"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAICompletionLogInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiCompletionLogs:write"
+      },
+      "delete": {
+        "operationId": "ai.aiCompletionLogs.delete",
+        "tags": [
+          "Ai Completion Logs"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiCompletionLogs:delete"
+      }
+    },
+    "/api/ai/aiChatThreads": {
+      "get": {
+        "operationId": "ai.aiChatThreads.query",
+        "tags": [
+          "Ai Chat Threads"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIChatThread"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIChatThreadFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatThreads:read"
+      },
+      "post": {
+        "operationId": "ai.aiChatThreads.create",
+        "tags": [
+          "Ai Chat Threads"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIChatThread"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIChatThreadInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatThreads:write"
+      }
+    },
+    "/api/ai/aiChatThreads/{id}": {
+      "get": {
+        "operationId": "ai.aiChatThreads.getById",
+        "tags": [
+          "Ai Chat Threads"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIChatThread"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatThreads:read"
+      },
+      "put": {
+        "operationId": "ai.aiChatThreads.update",
+        "tags": [
+          "Ai Chat Threads"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIChatThread"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIChatThreadInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatThreads:write"
+      },
+      "delete": {
+        "operationId": "ai.aiChatThreads.delete",
+        "tags": [
+          "Ai Chat Threads"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatThreads:delete"
+      }
+    },
+    "/api/ai/aiChatMessages": {
+      "get": {
+        "operationId": "ai.aiChatMessages.query",
+        "tags": [
+          "Ai Chat Messages"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIChatMessage"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIChatMessageFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatMessages:read"
+      },
+      "post": {
+        "operationId": "ai.aiChatMessages.create",
+        "tags": [
+          "Ai Chat Messages"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIChatMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIChatMessageInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatMessages:write"
+      }
+    },
+    "/api/ai/aiChatMessages/{id}": {
+      "get": {
+        "operationId": "ai.aiChatMessages.getById",
+        "tags": [
+          "Ai Chat Messages"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIChatMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatMessages:read"
+      },
+      "put": {
+        "operationId": "ai.aiChatMessages.update",
+        "tags": [
+          "Ai Chat Messages"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIChatMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIChatMessageInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatMessages:write"
+      },
+      "delete": {
+        "operationId": "ai.aiChatMessages.delete",
+        "tags": [
+          "Ai Chat Messages"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiChatMessages:delete"
+      }
+    },
+    "/api/ai/aiLlmProviders": {
+      "get": {
+        "operationId": "ai.aiLlmProviders.query",
+        "tags": [
+          "Ai Llm Providers"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Model"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ModelFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProviders:read"
+      },
+      "post": {
+        "operationId": "ai.aiLlmProviders.create",
+        "tags": [
+          "Ai Llm Providers"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Model"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModelInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProviders:write"
+      }
+    },
+    "/api/ai/aiLlmProviders/{id}": {
+      "get": {
+        "operationId": "ai.aiLlmProviders.getById",
+        "tags": [
+          "Ai Llm Providers"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Model"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProviders:read"
+      },
+      "put": {
+        "operationId": "ai.aiLlmProviders.update",
+        "tags": [
+          "Ai Llm Providers"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Model"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateModelInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProviders:write"
+      },
+      "delete": {
+        "operationId": "ai.aiLlmProviders.delete",
+        "tags": [
+          "Ai Llm Providers"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProviders:delete"
+      }
+    },
+    "/api/ai/aiAgents": {
+      "get": {
+        "operationId": "ai.aiAgents.query",
+        "tags": [
+          "Ai Agents"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgent"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgents:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgents.create",
+        "tags": [
+          "Ai Agents"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgents:write"
+      }
+    },
+    "/api/ai/aiAgents/{id}": {
+      "get": {
+        "operationId": "ai.aiAgents.getById",
+        "tags": [
+          "Ai Agents"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgents:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgents.update",
+        "tags": [
+          "Ai Agents"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgents:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgents.delete",
+        "tags": [
+          "Ai Agents"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgents:delete"
+      }
+    },
+    "/api/ai/aiAgentRuns": {
+      "get": {
+        "operationId": "ai.aiAgentRuns.query",
+        "tags": [
+          "Ai Agent Runs"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentRun"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentRunFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentRuns:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentRuns.create",
+        "tags": [
+          "Ai Agent Runs"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentRunInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentRuns:write"
+      }
+    },
+    "/api/ai/aiAgentRuns/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentRuns.getById",
+        "tags": [
+          "Ai Agent Runs"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentRuns:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentRuns.update",
+        "tags": [
+          "Ai Agent Runs"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentRunInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentRuns:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentRuns.delete",
+        "tags": [
+          "Ai Agent Runs"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentRuns:delete"
+      }
+    },
+    "/api/ai/aiAgentSteps": {
+      "get": {
+        "operationId": "ai.aiAgentSteps.query",
+        "tags": [
+          "Ai Agent Steps"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentStep"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentStepFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentSteps:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentSteps.create",
+        "tags": [
+          "Ai Agent Steps"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentStep"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentStepInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentSteps:write"
+      }
+    },
+    "/api/ai/aiAgentSteps/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentSteps.getById",
+        "tags": [
+          "Ai Agent Steps"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentStep"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentSteps:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentSteps.update",
+        "tags": [
+          "Ai Agent Steps"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentStep"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentStepInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentSteps:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentSteps.delete",
+        "tags": [
+          "Ai Agent Steps"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentSteps:delete"
+      }
+    },
+    "/api/ai/aiAgentArtifacts": {
+      "get": {
+        "operationId": "ai.aiAgentArtifacts.query",
+        "tags": [
+          "Ai Agent Artifacts"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentArtifact"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentArtifactFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentArtifacts:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentArtifacts.create",
+        "tags": [
+          "Ai Agent Artifacts"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentArtifact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentArtifactInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentArtifacts:write"
+      }
+    },
+    "/api/ai/aiAgentArtifacts/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentArtifacts.getById",
+        "tags": [
+          "Ai Agent Artifacts"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentArtifact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentArtifacts:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentArtifacts.update",
+        "tags": [
+          "Ai Agent Artifacts"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentArtifact"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentArtifactInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentArtifacts:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentArtifacts.delete",
+        "tags": [
+          "Ai Agent Artifacts"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentArtifacts:delete"
+      }
+    },
+    "/api/ai/aiAgentsActivity": {
+      "get": {
+        "operationId": "ai.aiAgentsActivity.query",
+        "tags": [
+          "Ai Agents Activity"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentActivity"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AgentActivityFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentsActivity:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentsActivity.create",
+        "tags": [
+          "Ai Agents Activity"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentActivity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAgentActivityInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentsActivity:write"
+      }
+    },
+    "/api/ai/aiAgentsActivity/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentsActivity.getById",
+        "tags": [
+          "Ai Agents Activity"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentActivity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentsActivity:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentsActivity.update",
+        "tags": [
+          "Ai Agents Activity"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentActivity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAgentActivityInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentsActivity:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentsActivity.delete",
+        "tags": [
+          "Ai Agents Activity"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentsActivity:delete"
+      }
+    },
+    "/api/ai/aiLlmProvidersActivity": {
+      "get": {
+        "operationId": "ai.aiLlmProvidersActivity.query",
+        "tags": [
+          "Ai Llm Providers Activity"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModelActivity"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ModelActivityFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProvidersActivity:read"
+      },
+      "post": {
+        "operationId": "ai.aiLlmProvidersActivity.create",
+        "tags": [
+          "Ai Llm Providers Activity"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelActivity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModelActivityInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProvidersActivity:write"
+      }
+    },
+    "/api/ai/aiLlmProvidersActivity/{id}": {
+      "get": {
+        "operationId": "ai.aiLlmProvidersActivity.getById",
+        "tags": [
+          "Ai Llm Providers Activity"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelActivity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProvidersActivity:read"
+      },
+      "put": {
+        "operationId": "ai.aiLlmProvidersActivity.update",
+        "tags": [
+          "Ai Llm Providers Activity"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelActivity"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateModelActivityInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProvidersActivity:write"
+      },
+      "delete": {
+        "operationId": "ai.aiLlmProvidersActivity.delete",
+        "tags": [
+          "Ai Llm Providers Activity"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiLlmProvidersActivity:delete"
+      }
+    },
+    "/api/ai/aiAgentWorkspaces": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaces.query",
+        "tags": [
+          "Ai Agent Workspaces"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentWorkspace"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentWorkspaceFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaces:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentWorkspaces.create",
+        "tags": [
+          "Ai Agent Workspaces"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspace"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentWorkspaceInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaces:write"
+      }
+    },
+    "/api/ai/aiAgentWorkspaces/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaces.getById",
+        "tags": [
+          "Ai Agent Workspaces"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspace"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaces:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentWorkspaces.update",
+        "tags": [
+          "Ai Agent Workspaces"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspace"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentWorkspaceInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaces:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentWorkspaces.delete",
+        "tags": [
+          "Ai Agent Workspaces"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaces:delete"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceIndexJobs": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceIndexJobs.query",
+        "tags": [
+          "Ai Agent Workspace Index Jobs"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentWorkspaceIndexJob"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentWorkspaceIndexJobFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceIndexJobs:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentWorkspaceIndexJobs.create",
+        "tags": [
+          "Ai Agent Workspace Index Jobs"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceIndexJob"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentWorkspaceIndexJobInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceIndexJobs:write"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceIndexJobs/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceIndexJobs.getById",
+        "tags": [
+          "Ai Agent Workspace Index Jobs"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceIndexJob"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceIndexJobs:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentWorkspaceIndexJobs.update",
+        "tags": [
+          "Ai Agent Workspace Index Jobs"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceIndexJob"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentWorkspaceIndexJobInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceIndexJobs:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentWorkspaceIndexJobs.delete",
+        "tags": [
+          "Ai Agent Workspace Index Jobs"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceIndexJobs:delete"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceFiles": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceFiles.query",
+        "tags": [
+          "Ai Agent Workspace Files"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentWorkspaceFile"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentWorkspaceFileFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceFiles:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentWorkspaceFiles.create",
+        "tags": [
+          "Ai Agent Workspace Files"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentWorkspaceFileInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceFiles:write"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceFiles/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceFiles.getById",
+        "tags": [
+          "Ai Agent Workspace Files"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceFiles:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentWorkspaceFiles.update",
+        "tags": [
+          "Ai Agent Workspace Files"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentWorkspaceFileInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceFiles:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentWorkspaceFiles.delete",
+        "tags": [
+          "Ai Agent Workspace Files"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceFiles:delete"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceChunks": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceChunks.query",
+        "tags": [
+          "Ai Agent Workspace Chunks"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentWorkspaceChunk"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentWorkspaceChunkFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceChunks:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentWorkspaceChunks.create",
+        "tags": [
+          "Ai Agent Workspace Chunks"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceChunk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentWorkspaceChunkInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceChunks:write"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceChunks/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceChunks.getById",
+        "tags": [
+          "Ai Agent Workspace Chunks"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceChunk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceChunks:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentWorkspaceChunks.update",
+        "tags": [
+          "Ai Agent Workspace Chunks"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceChunk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentWorkspaceChunkInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceChunks:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentWorkspaceChunks.delete",
+        "tags": [
+          "Ai Agent Workspace Chunks"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceChunks:delete"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceSymbols": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceSymbols.query",
+        "tags": [
+          "Ai Agent Workspace Symbols"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIAgentWorkspaceSymbol"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/AIAgentWorkspaceSymbolFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceSymbols:read"
+      },
+      "post": {
+        "operationId": "ai.aiAgentWorkspaceSymbols.create",
+        "tags": [
+          "Ai Agent Workspace Symbols"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceSymbol"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAIAgentWorkspaceSymbolInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceSymbols:write"
+      }
+    },
+    "/api/ai/aiAgentWorkspaceSymbols/{id}": {
+      "get": {
+        "operationId": "ai.aiAgentWorkspaceSymbols.getById",
+        "tags": [
+          "Ai Agent Workspace Symbols"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceSymbol"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceSymbols:read"
+      },
+      "put": {
+        "operationId": "ai.aiAgentWorkspaceSymbols.update",
+        "tags": [
+          "Ai Agent Workspace Symbols"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIAgentWorkspaceSymbol"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAIAgentWorkspaceSymbolInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceSymbols:write"
+      },
+      "delete": {
+        "operationId": "ai.aiAgentWorkspaceSymbols.delete",
+        "tags": [
+          "Ai Agent Workspace Symbols"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ai:aiAgentWorkspaceSymbols:delete"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ModelDescriptor": {},
+      "ChatMessage": {},
+      "ChatCompleteResponse": {},
+      "AICompletionLog": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "totalTokens": {
+            "type": "number"
+          },
+          "latencyMs": {
+            "type": "number"
+          },
+          "streaming": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "toolCallCount": {
+            "type": "number"
+          },
+          "responseFormat": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountKey",
+          "modelId",
+          "latencyMs",
+          "streaming",
+          "status"
+        ]
+      },
+      "AICompletionLogFilter": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "totalTokens": {
+            "type": "number"
+          },
+          "latencyMs": {
+            "type": "number"
+          },
+          "streaming": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "toolCallCount": {
+            "type": "number"
+          },
+          "responseFormat": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountKey",
+          "modelId",
+          "latencyMs",
+          "streaming",
+          "status"
+        ]
+      },
+      "CreateAICompletionLogInput": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "totalTokens": {
+            "type": "number"
+          },
+          "latencyMs": {
+            "type": "number"
+          },
+          "streaming": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "toolCallCount": {
+            "type": "number"
+          },
+          "responseFormat": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountKey",
+          "modelId",
+          "latencyMs",
+          "streaming",
+          "status"
+        ],
+        "description": "Auto-generated createInput for AICompletionLog"
+      },
+      "UpdateAICompletionLogInput": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "totalTokens": {
+            "type": "number"
+          },
+          "latencyMs": {
+            "type": "number"
+          },
+          "streaming": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "toolCallCount": {
+            "type": "number"
+          },
+          "responseFormat": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountKey",
+          "modelId",
+          "latencyMs",
+          "streaming",
+          "status"
+        ],
+        "description": "Auto-generated updateInput for AICompletionLog"
+      },
+      "AIChatThread": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "messageCount": {
+            "type": "number"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaceState": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "workspaceId": {
+            "type": "string"
+          },
+          "sessionManifestJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "worktreePath": {
+            "type": "string"
+          },
+          "observationTargetJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "taskSpecJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "verifyHistoryJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "observationTargetJson",
+          "taskSpecJson",
+          "verifyHistoryJson"
+        ]
+      },
+      "AIChatThreadFilter": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "messageCount": {
+            "type": "number"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaceState": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "workspaceId": {
+            "type": "string"
+          },
+          "sessionManifestJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "worktreePath": {
+            "type": "string"
+          },
+          "observationTargetJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "taskSpecJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "verifyHistoryJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "observationTargetJson",
+          "taskSpecJson",
+          "verifyHistoryJson"
+        ]
+      },
+      "CreateAIChatThreadInput": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "messageCount": {
+            "type": "number"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaceState": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "workspaceId": {
+            "type": "string"
+          },
+          "sessionManifestJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "worktreePath": {
+            "type": "string"
+          },
+          "observationTargetJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "taskSpecJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "verifyHistoryJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "observationTargetJson",
+          "taskSpecJson",
+          "verifyHistoryJson"
+        ],
+        "description": "Auto-generated createInput for AIChatThread"
+      },
+      "UpdateAIChatThreadInput": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "messageCount": {
+            "type": "number"
+          },
+          "lastMessageAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "workspaceState": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "workspaceId": {
+            "type": "string"
+          },
+          "sessionManifestJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "worktreePath": {
+            "type": "string"
+          },
+          "observationTargetJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "taskSpecJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "verifyHistoryJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "observationTargetJson",
+          "taskSpecJson",
+          "verifyHistoryJson"
+        ],
+        "description": "Auto-generated updateInput for AIChatThread"
+      },
+      "AIChatMessage": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "toolCalls": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "toolCallId": {
+            "type": "string"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "artifactIds": {
+            "type": "array",
+            "items": {}
+          },
+          "contentJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "role",
+          "content"
+        ]
+      },
+      "AIChatMessageFilter": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "toolCalls": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "toolCallId": {
+            "type": "string"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "artifactIds": {
+            "type": "array",
+            "items": {}
+          },
+          "contentJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "role",
+          "content"
+        ]
+      },
+      "CreateAIChatMessageInput": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "toolCalls": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "toolCallId": {
+            "type": "string"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "artifactIds": {
+            "type": "array",
+            "items": {}
+          },
+          "contentJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "role",
+          "content"
+        ],
+        "description": "Auto-generated createInput for AIChatMessage"
+      },
+      "UpdateAIChatMessageInput": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "modelId": {
+            "type": "string"
+          },
+          "promptTokens": {
+            "type": "number"
+          },
+          "completionTokens": {
+            "type": "number"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "recordModelKey": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "toolCalls": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "toolCallId": {
+            "type": "string"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "artifactIds": {
+            "type": "array",
+            "items": {}
+          },
+          "contentJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "role",
+          "content"
+        ],
+        "description": "Auto-generated updateInput for AIChatMessage"
+      },
+      "Model": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Unique identifier for the model (used in URLs and code)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the model (plural)"
+          },
+          "nameSingular": {
+            "type": "string",
+            "description": "Singular display name"
+          },
+          "singular": {
+            "type": "string",
+            "description": "Singular form for internal use"
+          },
+          "plural": {
+            "type": "string",
+            "description": "Plural form for internal use"
+          },
+          "moduleKey": {
+            "type": "string",
+            "description": "Module this model belongs to (e.g., sales, marketing)"
+          },
+          "databaseTarget": {
+            "type": "string",
+            "enum": [
+              "account",
+              "enterprise"
+            ],
+            "description": "Which database to store records in: account (tenant) or enterprise"
+          },
+          "collectionName": {
+            "type": "string",
+            "description": "MongoDB collection name (defaults to key if not specified)"
+          },
+          "isRecordHistoryEnabled": {
+            "type": "boolean",
+            "description": "Enable record history tracking"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of field definitions"
+          },
+          "layouts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of layout definitions"
+          },
+          "children": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Child relationships object"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "active",
+              "inactive",
+              "deleted"
+            ],
+            "description": "Model status"
+          },
+          "description": {
+            "type": "string",
+            "description": "Model description"
+          },
+          "version": {
+            "type": "string",
+            "description": "Model version"
+          }
+        },
+        "required": [
+          "nameSingular",
+          "moduleKey",
+          "databaseTarget",
+          "fields",
+          "layouts",
+          "status"
+        ]
+      },
+      "ModelFilter": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Unique identifier for the model (used in URLs and code)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the model (plural)"
+          },
+          "nameSingular": {
+            "type": "string",
+            "description": "Singular display name"
+          },
+          "singular": {
+            "type": "string",
+            "description": "Singular form for internal use"
+          },
+          "plural": {
+            "type": "string",
+            "description": "Plural form for internal use"
+          },
+          "moduleKey": {
+            "type": "string",
+            "description": "Module this model belongs to (e.g., sales, marketing)"
+          },
+          "databaseTarget": {
+            "type": "string",
+            "enum": [
+              "account",
+              "enterprise"
+            ],
+            "description": "Which database to store records in: account (tenant) or enterprise"
+          },
+          "collectionName": {
+            "type": "string",
+            "description": "MongoDB collection name (defaults to key if not specified)"
+          },
+          "isRecordHistoryEnabled": {
+            "type": "boolean",
+            "description": "Enable record history tracking"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of field definitions"
+          },
+          "layouts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of layout definitions"
+          },
+          "children": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Child relationships object"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "active",
+              "inactive",
+              "deleted"
+            ],
+            "description": "Model status"
+          },
+          "description": {
+            "type": "string",
+            "description": "Model description"
+          },
+          "version": {
+            "type": "string",
+            "description": "Model version"
+          }
+        },
+        "required": [
+          "nameSingular",
+          "moduleKey",
+          "databaseTarget",
+          "fields",
+          "layouts",
+          "status"
+        ]
+      },
+      "CreateModelInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Unique identifier for the model (used in URLs and code)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the model (plural)"
+          },
+          "nameSingular": {
+            "type": "string",
+            "description": "Singular display name"
+          },
+          "singular": {
+            "type": "string",
+            "description": "Singular form for internal use"
+          },
+          "plural": {
+            "type": "string",
+            "description": "Plural form for internal use"
+          },
+          "moduleKey": {
+            "type": "string",
+            "description": "Module this model belongs to (e.g., sales, marketing)"
+          },
+          "databaseTarget": {
+            "type": "string",
+            "enum": [
+              "account",
+              "enterprise"
+            ],
+            "description": "Which database to store records in: account (tenant) or enterprise"
+          },
+          "collectionName": {
+            "type": "string",
+            "description": "MongoDB collection name (defaults to key if not specified)"
+          },
+          "isRecordHistoryEnabled": {
+            "type": "boolean",
+            "description": "Enable record history tracking"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of field definitions"
+          },
+          "layouts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of layout definitions"
+          },
+          "children": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Child relationships object"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "active",
+              "inactive",
+              "deleted"
+            ],
+            "description": "Model status"
+          },
+          "description": {
+            "type": "string",
+            "description": "Model description"
+          },
+          "version": {
+            "type": "string",
+            "description": "Model version"
+          }
+        },
+        "required": [
+          "nameSingular",
+          "moduleKey",
+          "databaseTarget",
+          "fields",
+          "layouts",
+          "status"
+        ],
+        "description": "Auto-generated createInput for Model"
+      },
+      "UpdateModelInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Unique identifier for the model (used in URLs and code)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name for the model (plural)"
+          },
+          "nameSingular": {
+            "type": "string",
+            "description": "Singular display name"
+          },
+          "singular": {
+            "type": "string",
+            "description": "Singular form for internal use"
+          },
+          "plural": {
+            "type": "string",
+            "description": "Plural form for internal use"
+          },
+          "moduleKey": {
+            "type": "string",
+            "description": "Module this model belongs to (e.g., sales, marketing)"
+          },
+          "databaseTarget": {
+            "type": "string",
+            "enum": [
+              "account",
+              "enterprise"
+            ],
+            "description": "Which database to store records in: account (tenant) or enterprise"
+          },
+          "collectionName": {
+            "type": "string",
+            "description": "MongoDB collection name (defaults to key if not specified)"
+          },
+          "isRecordHistoryEnabled": {
+            "type": "boolean",
+            "description": "Enable record history tracking"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of field definitions"
+          },
+          "layouts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Array of layout definitions"
+          },
+          "children": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Child relationships object"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft-pending",
+              "active",
+              "inactive",
+              "deleted"
+            ],
+            "description": "Model status"
+          },
+          "description": {
+            "type": "string",
+            "description": "Model description"
+          },
+          "version": {
+            "type": "string",
+            "description": "Model version"
+          }
+        },
+        "required": [
+          "nameSingular",
+          "moduleKey",
+          "databaseTarget",
+          "fields",
+          "layouts",
+          "status"
+        ],
+        "description": "Auto-generated updateInput for Model"
+      },
+      "AIAgent": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "subAgentsEnabled": {
+            "type": "boolean"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "systemPrompt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new_session",
+              "active_session",
+              "canceled",
+              "archived",
+              "completed_success",
+              "completed_published",
+              "failed"
+            ]
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "titleSource": {
+            "type": "string",
+            "enum": [
+              "default",
+              "processing",
+              "phase1",
+              "phase2",
+              "manual"
+            ]
+          },
+          "titleGeneratedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "titleExchangeCount": {
+            "type": "number"
+          },
+          "composerDraft": {
+            "type": "string"
+          },
+          "sessionContextStats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "accountKey"
+        ]
+      },
+      "AIAgentFilter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "subAgentsEnabled": {
+            "type": "boolean"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "systemPrompt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new_session",
+              "active_session",
+              "canceled",
+              "archived",
+              "completed_success",
+              "completed_published",
+              "failed"
+            ]
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "titleSource": {
+            "type": "string",
+            "enum": [
+              "default",
+              "processing",
+              "phase1",
+              "phase2",
+              "manual"
+            ]
+          },
+          "titleGeneratedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "titleExchangeCount": {
+            "type": "number"
+          },
+          "composerDraft": {
+            "type": "string"
+          },
+          "sessionContextStats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "accountKey"
+        ]
+      },
+      "CreateAIAgentInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "subAgentsEnabled": {
+            "type": "boolean"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "systemPrompt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new_session",
+              "active_session",
+              "canceled",
+              "archived",
+              "completed_success",
+              "completed_published",
+              "failed"
+            ]
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "titleSource": {
+            "type": "string",
+            "enum": [
+              "default",
+              "processing",
+              "phase1",
+              "phase2",
+              "manual"
+            ]
+          },
+          "titleGeneratedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "titleExchangeCount": {
+            "type": "number"
+          },
+          "composerDraft": {
+            "type": "string"
+          },
+          "sessionContextStats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "accountKey"
+        ],
+        "description": "Auto-generated createInput for AIAgent"
+      },
+      "UpdateAIAgentInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "subAgentsEnabled": {
+            "type": "boolean"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "systemPrompt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new_session",
+              "active_session",
+              "canceled",
+              "archived",
+              "completed_success",
+              "completed_published",
+              "failed"
+            ]
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "titleSource": {
+            "type": "string",
+            "enum": [
+              "default",
+              "processing",
+              "phase1",
+              "phase2",
+              "manual"
+            ]
+          },
+          "titleGeneratedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "titleExchangeCount": {
+            "type": "number"
+          },
+          "composerDraft": {
+            "type": "string"
+          },
+          "sessionContextStats": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "accountKey"
+        ],
+        "description": "Auto-generated updateInput for AIAgent"
+      },
+      "AIAgentRun": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "parentRunId": {
+            "type": "string"
+          },
+          "userMessage": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "paused",
+              "failed",
+              "completed",
+              "canceled",
+              "retried",
+              "timed_out"
+            ]
+          },
+          "planJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "checkpointJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "revertedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "filesChangedCount": {
+            "type": "number"
+          },
+          "stalledPassesJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "accountKey",
+          "status"
+        ]
+      },
+      "AIAgentRunFilter": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "parentRunId": {
+            "type": "string"
+          },
+          "userMessage": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "paused",
+              "failed",
+              "completed",
+              "canceled",
+              "retried",
+              "timed_out"
+            ]
+          },
+          "planJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "checkpointJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "revertedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "filesChangedCount": {
+            "type": "number"
+          },
+          "stalledPassesJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "accountKey",
+          "status"
+        ]
+      },
+      "CreateAIAgentRunInput": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "parentRunId": {
+            "type": "string"
+          },
+          "userMessage": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "paused",
+              "failed",
+              "completed",
+              "canceled",
+              "retried",
+              "timed_out"
+            ]
+          },
+          "planJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "checkpointJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "revertedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "filesChangedCount": {
+            "type": "number"
+          },
+          "stalledPassesJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "accountKey",
+          "status"
+        ],
+        "description": "Auto-generated createInput for AIAgentRun"
+      },
+      "UpdateAIAgentRunInput": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "agentId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "parentRunId": {
+            "type": "string"
+          },
+          "userMessage": {
+            "type": "string"
+          },
+          "llmProviderKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "local",
+              "cloud"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "paused",
+              "failed",
+              "completed",
+              "canceled",
+              "retried",
+              "timed_out"
+            ]
+          },
+          "planJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "checkpointJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "revertedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "filesChangedCount": {
+            "type": "number"
+          },
+          "stalledPassesJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "threadId",
+          "accountKey",
+          "status"
+        ],
+        "description": "Auto-generated updateInput for AIAgentRun"
+      },
+      "AIAgentStep": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepKey": {
+            "type": "string"
+          },
+          "parentStepId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "stepType": {
+            "type": "string"
+          },
+          "dependsOnStepKeys": {
+            "type": "array",
+            "items": {}
+          },
+          "parallelGroup": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "toolGroup": {
+            "type": "string"
+          },
+          "attemptCount": {
+            "type": "number"
+          },
+          "maxAttempts": {
+            "type": "number"
+          },
+          "inputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "outputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "observation": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "stepKey"
+        ]
+      },
+      "AIAgentStepFilter": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepKey": {
+            "type": "string"
+          },
+          "parentStepId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "stepType": {
+            "type": "string"
+          },
+          "dependsOnStepKeys": {
+            "type": "array",
+            "items": {}
+          },
+          "parallelGroup": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "toolGroup": {
+            "type": "string"
+          },
+          "attemptCount": {
+            "type": "number"
+          },
+          "maxAttempts": {
+            "type": "number"
+          },
+          "inputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "outputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "observation": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "stepKey"
+        ]
+      },
+      "CreateAIAgentStepInput": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepKey": {
+            "type": "string"
+          },
+          "parentStepId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "stepType": {
+            "type": "string"
+          },
+          "dependsOnStepKeys": {
+            "type": "array",
+            "items": {}
+          },
+          "parallelGroup": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "toolGroup": {
+            "type": "string"
+          },
+          "attemptCount": {
+            "type": "number"
+          },
+          "maxAttempts": {
+            "type": "number"
+          },
+          "inputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "outputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "observation": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "stepKey"
+        ],
+        "description": "Auto-generated createInput for AIAgentStep"
+      },
+      "UpdateAIAgentStepInput": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepKey": {
+            "type": "string"
+          },
+          "parentStepId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "stepType": {
+            "type": "string"
+          },
+          "dependsOnStepKeys": {
+            "type": "array",
+            "items": {}
+          },
+          "parallelGroup": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "toolGroup": {
+            "type": "string"
+          },
+          "attemptCount": {
+            "type": "number"
+          },
+          "maxAttempts": {
+            "type": "number"
+          },
+          "inputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "outputJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "observation": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "runId",
+          "stepKey"
+        ],
+        "description": "Auto-generated updateInput for AIAgentStep"
+      },
+      "AIAgentArtifact": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "artifactType": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "contentRef": {
+            "type": "string"
+          },
+          "patchDiff": {
+            "type": "string"
+          },
+          "metadataJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "runId"
+        ]
+      },
+      "AIAgentArtifactFilter": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "artifactType": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "contentRef": {
+            "type": "string"
+          },
+          "patchDiff": {
+            "type": "string"
+          },
+          "metadataJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "runId"
+        ]
+      },
+      "CreateAIAgentArtifactInput": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "artifactType": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "contentRef": {
+            "type": "string"
+          },
+          "patchDiff": {
+            "type": "string"
+          },
+          "metadataJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "runId"
+        ],
+        "description": "Auto-generated createInput for AIAgentArtifact"
+      },
+      "UpdateAIAgentArtifactInput": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "artifactType": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "contentRef": {
+            "type": "string"
+          },
+          "patchDiff": {
+            "type": "string"
+          },
+          "metadataJson": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "toolName": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "runId"
+        ],
+        "description": "Auto-generated updateInput for AIAgentArtifact"
+      },
+      "AgentActivity": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        }
+      },
+      "AgentActivityFilter": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAgentActivityInput": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        },
+        "description": "Auto-generated createInput for AgentActivity"
+      },
+      "UpdateAgentActivityInput": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        },
+        "description": "Auto-generated updateInput for AgentActivity"
+      },
+      "ModelActivity": {
+        "type": "object",
+        "properties": {
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        }
+      },
+      "ModelActivityFilter": {
+        "type": "object",
+        "properties": {
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateModelActivityInput": {
+        "type": "object",
+        "properties": {
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        },
+        "description": "Auto-generated createInput for ModelActivity"
+      },
+      "UpdateModelActivityInput": {
+        "type": "object",
+        "properties": {
+          "recordId": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "typeKey": {
+            "type": "string"
+          },
+          "activityTitle": {
+            "type": "string"
+          },
+          "activityLabel": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdByDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdByUserKey": {
+            "type": "string"
+          }
+        },
+        "description": "Auto-generated updateInput for ModelActivity"
+      },
+      "AIAgentWorkspace": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "normalizedPath": {
+            "type": "string"
+          },
+          "gitRepoRoot": {
+            "type": "string"
+          },
+          "gitHeadSha": {
+            "type": "string"
+          },
+          "indexVersion": {
+            "type": "number"
+          },
+          "indexStatus": {
+            "type": "string",
+            "enum": [
+              "missing",
+              "queued",
+              "indexing",
+              "ready",
+              "stale",
+              "failed"
+            ]
+          },
+          "indexJobId": {
+            "type": "string"
+          },
+          "indexJobClaimedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobHeartbeatAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobClaimedBy": {
+            "type": "string"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileCount": {
+            "type": "number"
+          },
+          "chunkCount": {
+            "type": "number"
+          },
+          "symbolCount": {
+            "type": "number"
+          },
+          "indexError": {
+            "type": "string"
+          },
+          "parentRepoWorkspaceId": {
+            "type": "string"
+          },
+          "repoMapJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "normalizedPath"
+        ]
+      },
+      "AIAgentWorkspaceFilter": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "normalizedPath": {
+            "type": "string"
+          },
+          "gitRepoRoot": {
+            "type": "string"
+          },
+          "gitHeadSha": {
+            "type": "string"
+          },
+          "indexVersion": {
+            "type": "number"
+          },
+          "indexStatus": {
+            "type": "string",
+            "enum": [
+              "missing",
+              "queued",
+              "indexing",
+              "ready",
+              "stale",
+              "failed"
+            ]
+          },
+          "indexJobId": {
+            "type": "string"
+          },
+          "indexJobClaimedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobHeartbeatAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobClaimedBy": {
+            "type": "string"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileCount": {
+            "type": "number"
+          },
+          "chunkCount": {
+            "type": "number"
+          },
+          "symbolCount": {
+            "type": "number"
+          },
+          "indexError": {
+            "type": "string"
+          },
+          "parentRepoWorkspaceId": {
+            "type": "string"
+          },
+          "repoMapJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "normalizedPath"
+        ]
+      },
+      "CreateAIAgentWorkspaceInput": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "normalizedPath": {
+            "type": "string"
+          },
+          "gitRepoRoot": {
+            "type": "string"
+          },
+          "gitHeadSha": {
+            "type": "string"
+          },
+          "indexVersion": {
+            "type": "number"
+          },
+          "indexStatus": {
+            "type": "string",
+            "enum": [
+              "missing",
+              "queued",
+              "indexing",
+              "ready",
+              "stale",
+              "failed"
+            ]
+          },
+          "indexJobId": {
+            "type": "string"
+          },
+          "indexJobClaimedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobHeartbeatAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobClaimedBy": {
+            "type": "string"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileCount": {
+            "type": "number"
+          },
+          "chunkCount": {
+            "type": "number"
+          },
+          "symbolCount": {
+            "type": "number"
+          },
+          "indexError": {
+            "type": "string"
+          },
+          "parentRepoWorkspaceId": {
+            "type": "string"
+          },
+          "repoMapJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "normalizedPath"
+        ],
+        "description": "Auto-generated createInput for AIAgentWorkspace"
+      },
+      "UpdateAIAgentWorkspaceInput": {
+        "type": "object",
+        "properties": {
+          "accountKey": {
+            "type": "string"
+          },
+          "normalizedPath": {
+            "type": "string"
+          },
+          "gitRepoRoot": {
+            "type": "string"
+          },
+          "gitHeadSha": {
+            "type": "string"
+          },
+          "indexVersion": {
+            "type": "number"
+          },
+          "indexStatus": {
+            "type": "string",
+            "enum": [
+              "missing",
+              "queued",
+              "indexing",
+              "ready",
+              "stale",
+              "failed"
+            ]
+          },
+          "indexJobId": {
+            "type": "string"
+          },
+          "indexJobClaimedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobHeartbeatAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexJobClaimedBy": {
+            "type": "string"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileCount": {
+            "type": "number"
+          },
+          "chunkCount": {
+            "type": "number"
+          },
+          "symbolCount": {
+            "type": "number"
+          },
+          "indexError": {
+            "type": "string"
+          },
+          "parentRepoWorkspaceId": {
+            "type": "string"
+          },
+          "repoMapJson": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "accountKey",
+          "normalizedPath"
+        ],
+        "description": "Auto-generated updateInput for AIAgentWorkspace"
+      },
+      "AIAgentWorkspaceIndexJob": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "completed",
+              "failed",
+              "canceled"
+            ]
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "session_open",
+              "path_selected",
+              "run_preflight",
+              "git_head_changed",
+              "manual"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filesAdded": {
+            "type": "number"
+          },
+          "filesUpdated": {
+            "type": "number"
+          },
+          "filesDeleted": {
+            "type": "number"
+          },
+          "fromIndexVersion": {
+            "type": "number"
+          },
+          "toIndexVersion": {
+            "type": "number"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "status"
+        ]
+      },
+      "AIAgentWorkspaceIndexJobFilter": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "completed",
+              "failed",
+              "canceled"
+            ]
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "session_open",
+              "path_selected",
+              "run_preflight",
+              "git_head_changed",
+              "manual"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filesAdded": {
+            "type": "number"
+          },
+          "filesUpdated": {
+            "type": "number"
+          },
+          "filesDeleted": {
+            "type": "number"
+          },
+          "fromIndexVersion": {
+            "type": "number"
+          },
+          "toIndexVersion": {
+            "type": "number"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "status"
+        ]
+      },
+      "CreateAIAgentWorkspaceIndexJobInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "completed",
+              "failed",
+              "canceled"
+            ]
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "session_open",
+              "path_selected",
+              "run_preflight",
+              "git_head_changed",
+              "manual"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filesAdded": {
+            "type": "number"
+          },
+          "filesUpdated": {
+            "type": "number"
+          },
+          "filesDeleted": {
+            "type": "number"
+          },
+          "fromIndexVersion": {
+            "type": "number"
+          },
+          "toIndexVersion": {
+            "type": "number"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "status"
+        ],
+        "description": "Auto-generated createInput for AIAgentWorkspaceIndexJob"
+      },
+      "UpdateAIAgentWorkspaceIndexJobInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "completed",
+              "failed",
+              "canceled"
+            ]
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "session_open",
+              "path_selected",
+              "run_preflight",
+              "git_head_changed",
+              "manual"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filesAdded": {
+            "type": "number"
+          },
+          "filesUpdated": {
+            "type": "number"
+          },
+          "filesDeleted": {
+            "type": "number"
+          },
+          "fromIndexVersion": {
+            "type": "number"
+          },
+          "toIndexVersion": {
+            "type": "number"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "status"
+        ],
+        "description": "Auto-generated updateInput for AIAgentWorkspaceIndexJob"
+      },
+      "AIAgentWorkspaceFile": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "gitBlobSha": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "number"
+          },
+          "lineCount": {
+            "type": "number"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "relativePath"
+        ]
+      },
+      "AIAgentWorkspaceFileFilter": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "gitBlobSha": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "number"
+          },
+          "lineCount": {
+            "type": "number"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "relativePath"
+        ]
+      },
+      "CreateAIAgentWorkspaceFileInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "gitBlobSha": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "number"
+          },
+          "lineCount": {
+            "type": "number"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "relativePath"
+        ],
+        "description": "Auto-generated createInput for AIAgentWorkspaceFile"
+      },
+      "UpdateAIAgentWorkspaceFileInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "gitBlobSha": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "number"
+          },
+          "lineCount": {
+            "type": "number"
+          },
+          "indexedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "relativePath"
+        ],
+        "description": "Auto-generated updateInput for AIAgentWorkspaceFile"
+      },
+      "AIAgentWorkspaceChunk": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "chunkIndex": {
+            "type": "number"
+          },
+          "startLine": {
+            "type": "number"
+          },
+          "endLine": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "embedding": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "fileId"
+        ]
+      },
+      "AIAgentWorkspaceChunkFilter": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "chunkIndex": {
+            "type": "number"
+          },
+          "startLine": {
+            "type": "number"
+          },
+          "endLine": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "embedding": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "fileId"
+        ]
+      },
+      "CreateAIAgentWorkspaceChunkInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "chunkIndex": {
+            "type": "number"
+          },
+          "startLine": {
+            "type": "number"
+          },
+          "endLine": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "embedding": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "fileId"
+        ],
+        "description": "Auto-generated createInput for AIAgentWorkspaceChunk"
+      },
+      "UpdateAIAgentWorkspaceChunkInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "chunkIndex": {
+            "type": "number"
+          },
+          "startLine": {
+            "type": "number"
+          },
+          "endLine": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "embedding": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "fileId"
+        ],
+        "description": "Auto-generated updateInput for AIAgentWorkspaceChunk"
+      },
+      "AIAgentWorkspaceSymbol": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "line": {
+            "type": "number"
+          },
+          "exported": {
+            "type": "boolean"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "name"
+        ]
+      },
+      "AIAgentWorkspaceSymbolFilter": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "line": {
+            "type": "number"
+          },
+          "exported": {
+            "type": "boolean"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "name"
+        ]
+      },
+      "CreateAIAgentWorkspaceSymbolInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "line": {
+            "type": "number"
+          },
+          "exported": {
+            "type": "boolean"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "name"
+        ],
+        "description": "Auto-generated createInput for AIAgentWorkspaceSymbol"
+      },
+      "UpdateAIAgentWorkspaceSymbolInput": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "accountKey": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string"
+          },
+          "relativePath": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "line": {
+            "type": "number"
+          },
+          "exported": {
+            "type": "boolean"
+          },
+          "indexVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "workspaceId",
+          "accountKey",
+          "name"
+        ],
+        "description": "Auto-generated updateInput for AIAgentWorkspaceSymbol"
+      }
+    }
+  },
+  "x-warnings": [
+    "Unresolved type 'ModelDescriptor' → emitted permissive schema {}",
+    "Unresolved type 'ChatMessage' → emitted permissive schema {}",
+    "Unresolved type 'ChatCompleteResponse' → emitted permissive schema {}"
   ]
 }

@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Finance API",
-    "version": "1.0.6",
-    "description": "Monetary transactions and accounting: invoices, payments, bills, credit memos, Stripe integration, and contractor payouts.\n\n## Sections\n\n- [Contractor Payment Processing](/api/finance/tag/contractor-payment-processing)\n- [Customer Payment Processing](/api/finance/tag/customer-payment-processing)\n- [Customer Payments](/api/finance/tag/customer-payments)\n- [Finance Accounts](/api/finance/tag/finance-accounts)\n- [Finance Bills](/api/finance/tag/finance-bills)\n- [Finance Credit Memos](/api/finance/tag/finance-credit-memos)\n- [Finance Customers](/api/finance/tag/finance-customers)\n- [Finance Employees](/api/finance/tag/finance-employees)\n- [Finance Estimates](/api/finance/tag/finance-estimates)\n- [Finance Invoices](/api/finance/tag/finance-invoices)\n- [Finance Journal Entries](/api/finance/tag/finance-journal-entries)\n- [Finance Payments](/api/finance/tag/finance-payments)\n- [Finance Product Services](/api/finance/tag/finance-product-services)\n- [Finance Sales Receipts](/api/finance/tag/finance-sales-receipts)\n- [Finance Vendors](/api/finance/tag/finance-vendors)\n- [Stripe Integration](/api/finance/tag/stripe-integration)"
+    "version": "1.0.7",
+    "description": "OpenAPI 3.1 document for the `finance` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -6636,11 +6636,5 @@
         "description": "Auto-generated updateInput for FinanceSalesReceipt"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

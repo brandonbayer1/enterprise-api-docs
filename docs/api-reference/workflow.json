@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Workflow API",
-    "version": "1.0.10",
-    "description": "Automation infrastructure: scheduled events, status pipeline management, and rule-based workflow execution.\n\n## Sections\n\n- [Scheduled Events](/api/workflow/tag/scheduled-events)\n- [Workflow Status Pipeline Record States](/api/workflow/tag/workflow-status-pipeline-record-states)\n- [Workflow Status Pipelines](/api/workflow/tag/workflow-status-pipelines)"
+    "version": "1.0.22",
+    "description": "OpenAPI 3.1 document for the `workflow` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -23,7 +23,7 @@
         "tags": [
           "Scheduled Events"
         ],
-        "summary": "POST /workflow/scheduled-events \u2014 schedule a generic event",
+        "summary": "POST /workflow/scheduled-events — schedule a generic event",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -54,14 +54,14 @@
         },
         "x-scope": "clientServer",
         "x-permission": "workflow:scheduledevents:write",
-        "description": "POST /workflow/scheduled-events \u2014 schedule a generic event."
+        "description": "POST /workflow/scheduled-events — schedule a generic event."
       },
       "get": {
         "operationId": "workflow.scheduledevents.apiListScheduledEvents",
         "tags": [
           "Scheduled Events"
         ],
-        "summary": "GET /workflow/scheduled-events \u2014 list filtered events",
+        "summary": "GET /workflow/scheduled-events — list filtered events",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -103,7 +103,7 @@
         ],
         "x-scope": "clientServer",
         "x-permission": "workflow:scheduledevents:read",
-        "description": "GET /workflow/scheduled-events \u2014 list filtered events."
+        "description": "GET /workflow/scheduled-events — list filtered events."
       }
     },
     "/api/workflow/scheduled-events/workflow": {
@@ -112,7 +112,7 @@
         "tags": [
           "Scheduled Events"
         ],
-        "summary": "POST /workflow/scheduled-events/workflow \u2014 schedule a workflow-on-record",
+        "summary": "POST /workflow/scheduled-events/workflow — schedule a workflow-on-record",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -143,7 +143,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "workflow:scheduledevents:write",
-        "description": "POST /workflow/scheduled-events/workflow \u2014 schedule a workflow-on-record."
+        "description": "POST /workflow/scheduled-events/workflow — schedule a workflow-on-record."
       }
     },
     "/api/workflow/scheduled-events/cancel": {
@@ -152,7 +152,7 @@
         "tags": [
           "Scheduled Events"
         ],
-        "summary": "POST /workflow/scheduled-events/cancel \u2014 cancel one event",
+        "summary": "POST /workflow/scheduled-events/cancel — cancel one event",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -185,7 +185,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "workflow:scheduledevents:write",
-        "description": "POST /workflow/scheduled-events/cancel \u2014 cancel one event."
+        "description": "POST /workflow/scheduled-events/cancel — cancel one event."
       }
     },
     "/api/workflow/scheduled-events/dispatch": {
@@ -194,7 +194,7 @@
         "tags": [
           "Scheduled Events"
         ],
-        "summary": "POST /workflow/scheduled-events/dispatch \u2014 manual tick (ops/tests)",
+        "summary": "POST /workflow/scheduled-events/dispatch — manual tick (ops/tests)",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -227,7 +227,127 @@
         },
         "x-scope": "clientServer",
         "x-permission": "workflow:scheduledevents:write",
-        "description": "POST /workflow/scheduled-events/dispatch \u2014 manual tick (ops/tests)."
+        "description": "POST /workflow/scheduled-events/dispatch — manual tick (ops/tests)."
+      }
+    },
+    "/api/workflow/engine/channel-emails/send": {
+      "post": {
+        "operationId": "workflow.scheduledevents.apiSendChannelEmail",
+        "tags": [
+          "Scheduled Events"
+        ],
+        "summary": "POST /workflow/engine/channel-emails/send — enroll channel email audience and send",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "workflow:scheduledevents:write",
+        "description": "POST /workflow/engine/channel-emails/send — enroll channel email audience and send."
+      }
+    },
+    "/api/workflow/engine/channel-social/send": {
+      "post": {
+        "operationId": "workflow.scheduledevents.apiSendChannelSocial",
+        "tags": [
+          "Scheduled Events"
+        ],
+        "summary": "POST /workflow/engine/channel-social/send — enroll channel social audience and activate",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "workflow:scheduledevents:write",
+        "description": "POST /workflow/engine/channel-social/send — enroll channel social audience and activate."
+      }
+    },
+    "/api/workflow/engine/channel-emails/schedule": {
+      "post": {
+        "operationId": "workflow.scheduledevents.apiScheduleChannelEmail",
+        "tags": [
+          "Scheduled Events"
+        ],
+        "summary": "POST /workflow/engine/channel-emails/schedule",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "workflow:scheduledevents:write",
+        "description": "POST /workflow/engine/channel-emails/schedule\n\nPersist a ScheduledEvent that will fire `startChannelEmail` at `scheduledAt`.\nThe NATS transport arms a wake-up for events within the next hour; the\npolling safety net covers longer horizons."
       }
     },
     "/api/workflow/workflowStatusPipelines": {
@@ -862,7 +982,7 @@
           "nextRunAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Always populated \u2014 the worker watches this column."
+            "description": "Always populated — the worker watches this column."
           },
           "lastRunAt": {
             "type": "string",
@@ -915,7 +1035,7 @@
           },
           "when": {
             "type": "string",
-            "description": "Matches WorkflowDefinition.when \u2014 e.g. \"schedule\", \"follow-up\"."
+            "description": "Matches WorkflowDefinition.when — e.g. \"schedule\", \"follow-up\"."
           }
         },
         "required": [
@@ -1271,23 +1391,13 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "eventTypeKey",
           "nextRunAt",
           "status",
-          "accountId",
-          "createdByDate",
-          "updatedByDate"
+          "accountId"
         ]
       },
       "CreateScheduledEventInput": {
@@ -1355,23 +1465,13 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "eventTypeKey",
           "nextRunAt",
           "status",
-          "accountId",
-          "createdByDate",
-          "updatedByDate"
+          "accountId"
         ],
         "description": "Auto-generated createInput for ScheduledEvent"
       },
@@ -1440,36 +1540,22 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "eventTypeKey",
           "nextRunAt",
           "status",
-          "accountId",
-          "createdByDate",
-          "updatedByDate"
+          "accountId"
         ],
         "description": "Auto-generated updateInput for ScheduledEvent"
       }
     }
   },
   "x-warnings": [
-    "Unresolved type 'IEventSource' \u2192 emitted permissive schema {}",
-    "Unresolved type 'ScheduledEventStatus' \u2192 emitted permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
+    "Unresolved type 'IEventSource' → emitted permissive schema {}",
+    "Unresolved type 'ScheduledEventStatus' → emitted permissive schema {}",
+    "Unresolvable type 'import('../../workflow-engine/services/campaign-activation-listener').ChannelEmailSendResult' → emitted permissive schema {}",
+    "Unresolvable type 'import('../../workflow-engine/services/campaign-activation-listener').ChannelSocialSendResult' → emitted permissive schema {}"
   ]
 }

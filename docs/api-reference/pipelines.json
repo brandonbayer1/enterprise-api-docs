@@ -3,7 +3,7 @@
   "info": {
     "title": "Pipelines API",
     "version": "1.0.6",
-    "description": "Pipeline orchestration infrastructure for defining and monitoring data processing pipelines.\n\n## Sections\n\n- [Pipelines](/api/pipelines/tag/pipelines)"
+    "description": "OpenAPI 3.1 document for the `pipelines` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -44,11 +44,5 @@
   },
   "components": {
     "schemas": {}
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

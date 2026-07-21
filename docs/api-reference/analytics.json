@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Analytics API",
-    "version": "1.0.12",
-    "description": "Configurable reporting engine for surfacing business metrics \u2014 saved report definitions, categories, shares, and result execution.\n\n## Sections\n\n- [Components Allowed In Reports Selection](/api/analytics/tag/components-allowed-in-reports-selection)\n- [Report Category](/api/analytics/tag/report-category)\n- [Report Share](/api/analytics/tag/report-share)\n- [Reporting](/api/analytics/tag/reporting)\n- [Reports](/api/analytics/tag/reports)"
+    "version": "1.0.13",
+    "description": "OpenAPI 3.1 document for the `analytics` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -1219,10 +1219,6 @@
           },
           "previewImageFile": {
             "type": "string"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -1320,10 +1316,6 @@
           },
           "previewImageFile": {
             "type": "string"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -1422,10 +1414,6 @@
           },
           "previewImageFile": {
             "type": "string"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -1826,12 +1814,6 @@
     }
   },
   "x-warnings": [
-    "Unresolved type 'Report' \u2192 emitted permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
+    "Unresolved type 'Report' → emitted permissive schema {}"
   ]
 }

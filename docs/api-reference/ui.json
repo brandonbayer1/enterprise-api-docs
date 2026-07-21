@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "UI API",
-    "version": "1.0.8",
-    "description": "Application shell management: screens, workspaces, dashboards, components, support tickets, and product announcements.\n\n## Sections\n\n- [Components](/api/ui/tag/components)\n- [Dashboards](/api/ui/tag/dashboards)\n- [Drafts](/api/ui/tag/drafts)\n- [Enterprise Product Announcement Files](/api/ui/tag/enterprise-product-announcement-files)\n- [Enterprise Product Announcement Notes](/api/ui/tag/enterprise-product-announcement-notes)\n- [Enterprise Product Announcement Tasks](/api/ui/tag/enterprise-product-announcement-tasks)\n- [Enterprise Product Announcements](/api/ui/tag/enterprise-product-announcements)\n- [Record Recent Views](/api/ui/tag/record-recent-views)\n- [Registered Components](/api/ui/tag/registered-components)\n- [Screen Actions](/api/ui/tag/screen-actions)\n- [Screen Components](/api/ui/tag/screen-components)\n- [Screen Files](/api/ui/tag/screen-files)\n- [Screen Notes](/api/ui/tag/screen-notes)\n- [Screen Statuses](/api/ui/tag/screen-statuses)\n- [Screen Tasks](/api/ui/tag/screen-tasks)\n- [Screens](/api/ui/tag/screens)\n- [Settings](/api/ui/tag/settings)\n- [Support Ticket Files](/api/ui/tag/support-ticket-files)\n- [Support Ticket Notes](/api/ui/tag/support-ticket-notes)\n- [Support Ticket Resolutions](/api/ui/tag/support-ticket-resolutions)\n- [Support Ticket Tasks](/api/ui/tag/support-ticket-tasks)\n- [Support Tickets](/api/ui/tag/support-tickets)\n- [User Screens](/api/ui/tag/user-screens)\n- [Workspaces](/api/ui/tag/workspaces)"
+    "title": "Ui API",
+    "version": "1.0.11",
+    "description": "OpenAPI 3.1 document for the `ui` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -506,7 +506,70 @@
         ],
         "x-scope": "clientServer",
         "x-permission": "ui:screens:read",
-        "description": "Batch: all screens (optionally workspace-scoped) with their components\npopulated in a single round trip. One screens query + one screenComponents\n$in query, regardless of how many screens are in the workspace. The SPA's\nprefetcher calls this on login instead of issuing N parallel getScreenById\nrequests.\n\nMust come before /ui/screens/:id to avoid route conflicts \u2014 declaration\norder matters here."
+        "description": "Batch: all screens (optionally workspace-scoped) with their components\npopulated in a single round trip. One screens query + one screenComponents\n$in query, regardless of how many screens are in the workspace. The SPA's\nprefetcher calls this on login instead of issuing N parallel getScreenById\nrequests.\n\nMust come before /ui/screens/:id to avoid route conflicts — declaration\norder matters here."
+      }
+    },
+    "/api/ui/screens/{id}/for-user": {
+      "get": {
+        "operationId": "ui.screens.getScreenForUser",
+        "tags": [
+          "Screens"
+        ],
+        "summary": "Get screen by ID merged with the requesting user's personal components",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/IScreen"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ui:screens:read",
+        "description": "Get screen by ID merged with the requesting user's personal components.\nPass userId to overlay personal listing-view tabs saved via user-screen customisation."
       }
     },
     "/api/ui/screens/{id}": {
@@ -764,7 +827,7 @@
         "tags": [
           "Screens"
         ],
-        "summary": "Reset screen customization (deletes user customization, falls back to Account DB)",
+        "summary": "Reset screen customization for a user",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -794,6 +857,14 @@
             }
           },
           {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "accountKey",
             "in": "query",
             "required": true,
@@ -804,7 +875,7 @@
         ],
         "x-scope": "clientServer",
         "x-permission": "ui:screens:delete",
-        "description": "Reset screen customization (deletes user customization, falls back to Account DB)\nRestores the screen to its master/default state from backup"
+        "description": "Reset screen customization for a user.\n\n- Clears the user's personal screen overlay (componentConfigOverrides + personal views)\n  so column widths and personal tabs revert to the system defaults.\n- If the screen also has a masterBackup (from a previous admin edit-mode save),\n  restores the system-level components and screen properties from that backup.\n- If there is neither a user overlay nor a backup, returns success — nothing to reset."
       }
     },
     "/api/ui/admin/generate-migration": {
@@ -855,7 +926,7 @@
         },
         "x-scope": "clientServer",
         "x-permission": "ui:screens:write",
-        "description": "Generate a Flyway migration script by diffing local DB against the local reference DB.\n\nOnly available in local environments \u2014 the reference DB (Enterprise_ref / <tenant>_ref)\nis populated by running 'npm run db:sync-ref' which dumps from DEV.\n\nReturns the filename and path written to db/migration/, plus validation result."
+        "description": "Generate a Flyway migration script by diffing local DB against the local reference DB.\n\nOnly available in local environments — the reference DB (Enterprise_ref / <tenant>_ref)\nis populated by running 'npm run db:sync-ref' which dumps from DEV.\n\nReturns the filename and path written to db/migration/, plus validation result."
       }
     },
     "/api/ui/user-screens": {
@@ -1070,6 +1141,57 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreatePersonalViewBody"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ui:userscreens:write"
+      }
+    },
+    "/api/ui/user-screens/{userScreenId}/component-config": {
+      "post": {
+        "operationId": "ui.userscreens.patchComponentConfig",
+        "tags": [
+          "User Screens"
+        ],
+        "summary": "Patch Component Config",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "userScreenId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
               }
             }
           }
@@ -3827,201 +3949,6 @@
         "x-permission": "ui:drafts:delete"
       }
     },
-    "/api/ui/userScreens": {
-      "get": {
-        "operationId": "ui.userScreens.query",
-        "tags": [
-          "User Screens"
-        ],
-        "summary": "Query",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserScreen"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        },
-        "parameters": [
-          {
-            "name": "filter",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/UserScreenFilter"
-            }
-          }
-        ],
-        "x-scope": "clientServer",
-        "x-permission": "ui:userScreens:read"
-      },
-      "post": {
-        "operationId": "ui.userScreens.create",
-        "tags": [
-          "User Screens"
-        ],
-        "summary": "Create",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserScreen"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserScreenInput"
-              }
-            }
-          }
-        },
-        "x-scope": "clientServer",
-        "x-permission": "ui:userScreens:write"
-      }
-    },
-    "/api/ui/userScreens/{id}": {
-      "get": {
-        "operationId": "ui.userScreens.getById",
-        "tags": [
-          "User Screens"
-        ],
-        "summary": "Get By Id",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserScreen"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "x-scope": "clientServer",
-        "x-permission": "ui:userScreens:read"
-      },
-      "put": {
-        "operationId": "ui.userScreens.update",
-        "tags": [
-          "User Screens"
-        ],
-        "summary": "Update",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserScreen"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserScreenInput"
-              }
-            }
-          }
-        },
-        "x-scope": "clientServer",
-        "x-permission": "ui:userScreens:write"
-      },
-      "delete": {
-        "operationId": "ui.userScreens.delete",
-        "tags": [
-          "User Screens"
-        ],
-        "summary": "Delete",
-        "responses": {
-          "204": {
-            "description": "No content"
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "x-scope": "clientServer",
-        "x-permission": "ui:userScreens:delete"
-      }
-    },
     "/api/ui/supportTicketResolutions": {
       "get": {
         "operationId": "ui.supportTicketResolutions.query",
@@ -5581,6 +5508,201 @@
         "x-scope": "clientServer",
         "x-permission": "ui:screenComponents:delete"
       }
+    },
+    "/api/ui/userScreens": {
+      "get": {
+        "operationId": "ui.userScreens.query",
+        "tags": [
+          "User Screens"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserScreen"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/UserScreenFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ui:userScreens:read"
+      },
+      "post": {
+        "operationId": "ui.userScreens.create",
+        "tags": [
+          "User Screens"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserScreen"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserScreenInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ui:userScreens:write"
+      }
+    },
+    "/api/ui/userScreens/{id}": {
+      "get": {
+        "operationId": "ui.userScreens.getById",
+        "tags": [
+          "User Screens"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserScreen"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ui:userScreens:read"
+      },
+      "put": {
+        "operationId": "ui.userScreens.update",
+        "tags": [
+          "User Screens"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserScreen"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserScreenInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "ui:userScreens:write"
+      },
+      "delete": {
+        "operationId": "ui.userScreens.delete",
+        "tags": [
+          "User Screens"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "ui:userScreens:delete"
+      }
     }
   },
   "components": {
@@ -6039,16 +6161,6 @@
             "type": "array",
             "items": {}
           },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
-          },
           "searchString": {
             "type": "string"
           },
@@ -6167,16 +6279,6 @@
           "metaKeywords": {
             "type": "array",
             "items": {}
-          },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
           },
           "searchString": {
             "type": "string"
@@ -6297,16 +6399,6 @@
             "type": "array",
             "items": {}
           },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
-          },
           "searchString": {
             "type": "string"
           },
@@ -6426,16 +6518,6 @@
           "metaKeywords": {
             "type": "array",
             "items": {}
-          },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
           },
           "searchString": {
             "type": "string"
@@ -6839,6 +6921,7 @@
               "activity",
               "action-card-list",
               "contact-card",
+              "ticket-info",
               "quote-record-overview",
               "files",
               "tasks",
@@ -6851,8 +6934,8 @@
               "notification",
               "automation",
               "campaign-workflow",
-              "post-designer",
-              "social-design-images",
+              "workflow-editor",
+              "step-properties",
               "email-designer",
               "code",
               "conversation-list",
@@ -7004,6 +7087,7 @@
               "activity",
               "action-card-list",
               "contact-card",
+              "ticket-info",
               "quote-record-overview",
               "files",
               "tasks",
@@ -7016,8 +7100,8 @@
               "notification",
               "automation",
               "campaign-workflow",
-              "post-designer",
-              "social-design-images",
+              "workflow-editor",
+              "step-properties",
               "email-designer",
               "code",
               "conversation-list",
@@ -7169,6 +7253,7 @@
               "activity",
               "action-card-list",
               "contact-card",
+              "ticket-info",
               "quote-record-overview",
               "files",
               "tasks",
@@ -7181,8 +7266,8 @@
               "notification",
               "automation",
               "campaign-workflow",
-              "post-designer",
-              "social-design-images",
+              "workflow-editor",
+              "step-properties",
               "email-designer",
               "code",
               "conversation-list",
@@ -7335,6 +7420,7 @@
               "activity",
               "action-card-list",
               "contact-card",
+              "ticket-info",
               "quote-record-overview",
               "files",
               "tasks",
@@ -7347,8 +7433,8 @@
               "notification",
               "automation",
               "campaign-workflow",
-              "post-designer",
-              "social-design-images",
+              "workflow-editor",
+              "step-properties",
               "email-designer",
               "code",
               "conversation-list",
@@ -7725,14 +7811,6 @@
           "resolutionSummary": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
           "avatarFile": {
             "type": "string"
           },
@@ -7744,9 +7822,7 @@
           "name",
           "key",
           "status",
-          "assignedTo",
-          "createdByDate",
-          "updatedByDate"
+          "assignedTo"
         ]
       },
       "SupportTicketFilter": {
@@ -7796,14 +7872,6 @@
           "resolutionSummary": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
           "avatarFile": {
             "type": "string"
           },
@@ -7815,9 +7883,7 @@
           "name",
           "key",
           "status",
-          "assignedTo",
-          "createdByDate",
-          "updatedByDate"
+          "assignedTo"
         ]
       },
       "CreateSupportTicketInput": {
@@ -7867,14 +7933,6 @@
           "resolutionSummary": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
           "avatarFile": {
             "type": "string"
           },
@@ -7886,9 +7944,7 @@
           "name",
           "key",
           "status",
-          "assignedTo",
-          "createdByDate",
-          "updatedByDate"
+          "assignedTo"
         ],
         "description": "Auto-generated createInput for SupportTicket"
       },
@@ -7939,14 +7995,6 @@
           "resolutionSummary": {
             "type": "string"
           },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
           "avatarFile": {
             "type": "string"
           },
@@ -7958,9 +8006,7 @@
           "name",
           "key",
           "status",
-          "assignedTo",
-          "createdByDate",
-          "updatedByDate"
+          "assignedTo"
         ],
         "description": "Auto-generated updateInput for SupportTicket"
       },
@@ -8024,7 +8070,7 @@
             "type": "boolean",
             "description": "When enabled, this action is hidden in the flyout panel and only appears on the full detail page."
           },
-          "primary": {
+          "isPrimary": {
             "type": "boolean",
             "description": "When enabled, renders as the primary CTA button in the action bar"
           }
@@ -8095,7 +8141,7 @@
             "type": "boolean",
             "description": "When enabled, this action is hidden in the flyout panel and only appears on the full detail page."
           },
-          "primary": {
+          "isPrimary": {
             "type": "boolean",
             "description": "When enabled, renders as the primary CTA button in the action bar"
           }
@@ -8166,7 +8212,7 @@
             "type": "boolean",
             "description": "When enabled, this action is hidden in the flyout panel and only appears on the full detail page."
           },
-          "primary": {
+          "isPrimary": {
             "type": "boolean",
             "description": "When enabled, renders as the primary CTA button in the action bar"
           }
@@ -8238,7 +8284,7 @@
             "type": "boolean",
             "description": "When enabled, this action is hidden in the flyout panel and only appears on the full detail page."
           },
-          "primary": {
+          "isPrimary": {
             "type": "boolean",
             "description": "When enabled, renders as the primary CTA button in the action bar"
           }
@@ -8345,13 +8391,35 @@
             "type": "string",
             "description": "HTML content for the site footer"
           },
-          "accountUrl": {
+          "defaultSendFromName": {
             "type": "string",
-            "description": "Public URL for this tenant (e.g. https://account1.enterprisecrmdev.com). Replaces the deprecated FRONTEND_URL env var."
+            "description": "Default sender display name for new marketing emails"
           },
-          "gmailRedirectUri": {
+          "defaultSendFromEmail": {
             "type": "string",
-            "description": "OAuth2 redirect URI registered with Google for Gmail integration. Replaces the deprecated GOOGLE_GMAIL_REDIRECT_URI env var."
+            "description": "Default sender email address for new marketing emails"
+          },
+          "defaultReplyToEmail": {
+            "type": "string",
+            "description": "Default reply-to address for new marketing emails"
+          },
+          "emailHeader": {
+            "type": "string",
+            "description": "HTML header prepended to marketing emails (table-based, inline styles)"
+          },
+          "emailFooter": {
+            "type": "string",
+            "description": "HTML footer appended to marketing emails (table-based, inline styles)"
+          },
+          "aiDisplayMode": {
+            "type": "string",
+            "enum": [
+              "hidden",
+              "bottom-center",
+              "bottom-left",
+              "bottom-right"
+            ],
+            "description": "Controls visibility and position of the floating AI panel"
           }
         },
         "required": [
@@ -8457,13 +8525,35 @@
             "type": "string",
             "description": "HTML content for the site footer"
           },
-          "accountUrl": {
+          "defaultSendFromName": {
             "type": "string",
-            "description": "Public URL for this tenant (e.g. https://account1.enterprisecrmdev.com). Replaces the deprecated FRONTEND_URL env var."
+            "description": "Default sender display name for new marketing emails"
           },
-          "gmailRedirectUri": {
+          "defaultSendFromEmail": {
             "type": "string",
-            "description": "OAuth2 redirect URI registered with Google for Gmail integration. Replaces the deprecated GOOGLE_GMAIL_REDIRECT_URI env var."
+            "description": "Default sender email address for new marketing emails"
+          },
+          "defaultReplyToEmail": {
+            "type": "string",
+            "description": "Default reply-to address for new marketing emails"
+          },
+          "emailHeader": {
+            "type": "string",
+            "description": "HTML header prepended to marketing emails (table-based, inline styles)"
+          },
+          "emailFooter": {
+            "type": "string",
+            "description": "HTML footer appended to marketing emails (table-based, inline styles)"
+          },
+          "aiDisplayMode": {
+            "type": "string",
+            "enum": [
+              "hidden",
+              "bottom-center",
+              "bottom-left",
+              "bottom-right"
+            ],
+            "description": "Controls visibility and position of the floating AI panel"
           }
         },
         "required": [
@@ -8569,13 +8659,35 @@
             "type": "string",
             "description": "HTML content for the site footer"
           },
-          "accountUrl": {
+          "defaultSendFromName": {
             "type": "string",
-            "description": "Public URL for this tenant (e.g. https://account1.enterprisecrmdev.com). Replaces the deprecated FRONTEND_URL env var."
+            "description": "Default sender display name for new marketing emails"
           },
-          "gmailRedirectUri": {
+          "defaultSendFromEmail": {
             "type": "string",
-            "description": "OAuth2 redirect URI registered with Google for Gmail integration. Replaces the deprecated GOOGLE_GMAIL_REDIRECT_URI env var."
+            "description": "Default sender email address for new marketing emails"
+          },
+          "defaultReplyToEmail": {
+            "type": "string",
+            "description": "Default reply-to address for new marketing emails"
+          },
+          "emailHeader": {
+            "type": "string",
+            "description": "HTML header prepended to marketing emails (table-based, inline styles)"
+          },
+          "emailFooter": {
+            "type": "string",
+            "description": "HTML footer appended to marketing emails (table-based, inline styles)"
+          },
+          "aiDisplayMode": {
+            "type": "string",
+            "enum": [
+              "hidden",
+              "bottom-center",
+              "bottom-left",
+              "bottom-right"
+            ],
+            "description": "Controls visibility and position of the floating AI panel"
           }
         },
         "required": [
@@ -8682,13 +8794,35 @@
             "type": "string",
             "description": "HTML content for the site footer"
           },
-          "accountUrl": {
+          "defaultSendFromName": {
             "type": "string",
-            "description": "Public URL for this tenant (e.g. https://account1.enterprisecrmdev.com). Replaces the deprecated FRONTEND_URL env var."
+            "description": "Default sender display name for new marketing emails"
           },
-          "gmailRedirectUri": {
+          "defaultSendFromEmail": {
             "type": "string",
-            "description": "OAuth2 redirect URI registered with Google for Gmail integration. Replaces the deprecated GOOGLE_GMAIL_REDIRECT_URI env var."
+            "description": "Default sender email address for new marketing emails"
+          },
+          "defaultReplyToEmail": {
+            "type": "string",
+            "description": "Default reply-to address for new marketing emails"
+          },
+          "emailHeader": {
+            "type": "string",
+            "description": "HTML header prepended to marketing emails (table-based, inline styles)"
+          },
+          "emailFooter": {
+            "type": "string",
+            "description": "HTML footer appended to marketing emails (table-based, inline styles)"
+          },
+          "aiDisplayMode": {
+            "type": "string",
+            "enum": [
+              "hidden",
+              "bottom-center",
+              "bottom-left",
+              "bottom-right"
+            ],
+            "description": "Controls visibility and position of the floating AI panel"
           }
         },
         "required": [
@@ -8709,16 +8843,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "SupportTicketNoteFilter": {
@@ -8730,16 +8859,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CreateSupportTicketNoteInput": {
@@ -8751,16 +8875,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated createInput for SupportTicketNote"
       },
@@ -8773,16 +8892,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated updateInput for SupportTicketNote"
       },
@@ -8795,16 +8909,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "SupportTicketFileFilter": {
@@ -8816,16 +8925,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateSupportTicketFileInput": {
@@ -8837,16 +8941,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for SupportTicketFile"
       },
@@ -8859,16 +8958,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for SupportTicketFile"
       },
@@ -8881,16 +8975,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "SupportTicketTaskFilter": {
@@ -8902,16 +8991,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CreateSupportTicketTaskInput": {
@@ -8923,16 +9007,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated createInput for SupportTicketTask"
       },
@@ -8945,16 +9024,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "supportTicket",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated updateInput for SupportTicketTask"
       },
@@ -8995,7 +9069,7 @@
           "emoji": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Avatar/emoji shown on the thumbnail card \u2014 { type: \"image\", value: \"/avatars/1.jpeg\" }"
+            "description": "Avatar/emoji shown on the thumbnail card — { type: \"image\", value: \"/avatars/1.jpeg\" }"
           },
           "url": {
             "type": "string",
@@ -9005,17 +9079,16 @@
             "type": "string",
             "description": "Optional image URL for the thumbnail card"
           },
-          "createdByDate": {
+          "recordModelId": {
             "type": "string",
-            "format": "date-time"
+            "description": "Model id (hex) of the viewed record — companion to recordModelKey"
           }
         },
         "required": [
           "userId",
           "recordId",
           "recordModelKey",
-          "title",
-          "createdByDate"
+          "title"
         ]
       },
       "RecordRecentViewFilter": {
@@ -9055,7 +9128,7 @@
           "emoji": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Avatar/emoji shown on the thumbnail card \u2014 { type: \"image\", value: \"/avatars/1.jpeg\" }"
+            "description": "Avatar/emoji shown on the thumbnail card — { type: \"image\", value: \"/avatars/1.jpeg\" }"
           },
           "url": {
             "type": "string",
@@ -9065,17 +9138,16 @@
             "type": "string",
             "description": "Optional image URL for the thumbnail card"
           },
-          "createdByDate": {
+          "recordModelId": {
             "type": "string",
-            "format": "date-time"
+            "description": "Model id (hex) of the viewed record — companion to recordModelKey"
           }
         },
         "required": [
           "userId",
           "recordId",
           "recordModelKey",
-          "title",
-          "createdByDate"
+          "title"
         ]
       },
       "CreateRecordRecentViewInput": {
@@ -9115,7 +9187,7 @@
           "emoji": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Avatar/emoji shown on the thumbnail card \u2014 { type: \"image\", value: \"/avatars/1.jpeg\" }"
+            "description": "Avatar/emoji shown on the thumbnail card — { type: \"image\", value: \"/avatars/1.jpeg\" }"
           },
           "url": {
             "type": "string",
@@ -9125,17 +9197,16 @@
             "type": "string",
             "description": "Optional image URL for the thumbnail card"
           },
-          "createdByDate": {
+          "recordModelId": {
             "type": "string",
-            "format": "date-time"
+            "description": "Model id (hex) of the viewed record — companion to recordModelKey"
           }
         },
         "required": [
           "userId",
           "recordId",
           "recordModelKey",
-          "title",
-          "createdByDate"
+          "title"
         ],
         "description": "Auto-generated createInput for RecordRecentView"
       },
@@ -9176,7 +9247,7 @@
           "emoji": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Avatar/emoji shown on the thumbnail card \u2014 { type: \"image\", value: \"/avatars/1.jpeg\" }"
+            "description": "Avatar/emoji shown on the thumbnail card — { type: \"image\", value: \"/avatars/1.jpeg\" }"
           },
           "url": {
             "type": "string",
@@ -9186,17 +9257,16 @@
             "type": "string",
             "description": "Optional image URL for the thumbnail card"
           },
-          "createdByDate": {
+          "recordModelId": {
             "type": "string",
-            "format": "date-time"
+            "description": "Model id (hex) of the viewed record — companion to recordModelKey"
           }
         },
         "required": [
           "userId",
           "recordId",
           "recordModelKey",
-          "title",
-          "createdByDate"
+          "title"
         ],
         "description": "Auto-generated updateInput for RecordRecentView"
       },
@@ -9230,21 +9300,11 @@
           },
           "key": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "title",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "EnterpriseProductAnnouncementFilter": {
@@ -9277,21 +9337,11 @@
           },
           "key": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "title",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "CreateEnterpriseProductAnnouncementInput": {
@@ -9324,21 +9374,11 @@
           },
           "key": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "title",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated createInput for EnterpriseProductAnnouncement"
       },
@@ -9372,21 +9412,11 @@
           },
           "key": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "title",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated updateInput for EnterpriseProductAnnouncement"
       },
@@ -9405,7 +9435,7 @@
               "account",
               "campaign"
             ],
-            "description": "Category of the draft \u2014 matches the source model"
+            "description": "Category of the draft — matches the source model"
           },
           "modelKey": {
             "type": "string",
@@ -9413,7 +9443,7 @@
           },
           "referenceId": {
             "type": "string",
-            "description": "ID of the source record \u2014 null if not yet saved"
+            "description": "ID of the source record — null if not yet saved"
           },
           "navigateTo": {
             "type": "string",
@@ -9447,7 +9477,7 @@
               "account",
               "campaign"
             ],
-            "description": "Category of the draft \u2014 matches the source model"
+            "description": "Category of the draft — matches the source model"
           },
           "modelKey": {
             "type": "string",
@@ -9455,7 +9485,7 @@
           },
           "referenceId": {
             "type": "string",
-            "description": "ID of the source record \u2014 null if not yet saved"
+            "description": "ID of the source record — null if not yet saved"
           },
           "navigateTo": {
             "type": "string",
@@ -9489,7 +9519,7 @@
               "account",
               "campaign"
             ],
-            "description": "Category of the draft \u2014 matches the source model"
+            "description": "Category of the draft — matches the source model"
           },
           "modelKey": {
             "type": "string",
@@ -9497,7 +9527,7 @@
           },
           "referenceId": {
             "type": "string",
-            "description": "ID of the source record \u2014 null if not yet saved"
+            "description": "ID of the source record — null if not yet saved"
           },
           "navigateTo": {
             "type": "string",
@@ -9532,7 +9562,7 @@
               "account",
               "campaign"
             ],
-            "description": "Category of the draft \u2014 matches the source model"
+            "description": "Category of the draft — matches the source model"
           },
           "modelKey": {
             "type": "string",
@@ -9540,7 +9570,7 @@
           },
           "referenceId": {
             "type": "string",
-            "description": "ID of the source record \u2014 null if not yet saved"
+            "description": "ID of the source record — null if not yet saved"
           },
           "navigateTo": {
             "type": "string",
@@ -9559,580 +9589,6 @@
           "name"
         ],
         "description": "Auto-generated updateInput for Draft"
-      },
-      "UserScreen": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "screenKey": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "urlPattern": {
-            "type": "string",
-            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
-          },
-          "model": {
-            "type": "string",
-            "description": "Related model for data-driven screens"
-          },
-          "dataSource": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Optional configuration: { screenId?: string } - Link to custom detail screen"
-          },
-          "layout": {
-            "type": "string",
-            "description": "Layout key to use for this screen"
-          },
-          "actions": {
-            "type": "array",
-            "items": {},
-            "description": "Custom action buttons for this screen (array of action objects)"
-          },
-          "status": {
-            "type": "string",
-            "description": "Current status of the screen"
-          },
-          "isPublic": {
-            "type": "boolean"
-          },
-          "comingSoon": {
-            "type": "boolean",
-            "description": "When true, this screen is not yet available and shows a Coming Soon placeholder"
-          },
-          "mapScreen": {
-            "type": "boolean",
-            "description": "When enabled, removes padding/margins and overlays screen icon and title in upper left"
-          },
-          "fullScreen": {
-            "type": "boolean",
-            "description": "When enabled, keeps header/actions visible but makes the grid fill remaining height"
-          },
-          "maxWidth": {
-            "type": "string",
-            "description": "Maximum width for screen content (e.g., \"1200px\", \"80rem\"). When set, centers content with auto margins on sides."
-          },
-          "enableTitle": {
-            "type": "boolean",
-            "description": "When false, hides the screen title. Default is true."
-          },
-          "enablePrimaryActionBar": {
-            "type": "boolean",
-            "description": "When false, hides the primary action bar. Default is true."
-          },
-          "requiredPermissions": {
-            "type": "array",
-            "items": {},
-            "description": "Permissions required to access this screen"
-          },
-          "navigationItem": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          },
-          "feature": {
-            "type": "string",
-            "description": "Feature this screen belongs to (e.g. ui-screens)"
-          },
-          "isDetail": {
-            "type": "boolean",
-            "description": "When true, this screen is a detail/record view (not a listing)"
-          },
-          "title": {
-            "type": "string"
-          },
-          "metaDescription": {
-            "type": "string"
-          },
-          "metaKeywords": {
-            "type": "array",
-            "items": {}
-          },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
-          },
-          "searchString": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "avatarFile": {
-            "type": "string"
-          },
-          "previewImageFile": {
-            "type": "string"
-          },
-          "userId": {
-            "type": "string"
-          },
-          "userKey": {
-            "type": "string"
-          },
-          "baseScreenId": {
-            "type": "string"
-          },
-          "baseScreenKey": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "screenKey",
-          "url",
-          "status",
-          "searchString",
-          "summary",
-          "userId",
-          "baseScreenId"
-        ]
-      },
-      "UserScreenFilter": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "screenKey": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "urlPattern": {
-            "type": "string",
-            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
-          },
-          "model": {
-            "type": "string",
-            "description": "Related model for data-driven screens"
-          },
-          "dataSource": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Optional configuration: { screenId?: string } - Link to custom detail screen"
-          },
-          "layout": {
-            "type": "string",
-            "description": "Layout key to use for this screen"
-          },
-          "actions": {
-            "type": "array",
-            "items": {},
-            "description": "Custom action buttons for this screen (array of action objects)"
-          },
-          "status": {
-            "type": "string",
-            "description": "Current status of the screen"
-          },
-          "isPublic": {
-            "type": "boolean"
-          },
-          "comingSoon": {
-            "type": "boolean",
-            "description": "When true, this screen is not yet available and shows a Coming Soon placeholder"
-          },
-          "mapScreen": {
-            "type": "boolean",
-            "description": "When enabled, removes padding/margins and overlays screen icon and title in upper left"
-          },
-          "fullScreen": {
-            "type": "boolean",
-            "description": "When enabled, keeps header/actions visible but makes the grid fill remaining height"
-          },
-          "maxWidth": {
-            "type": "string",
-            "description": "Maximum width for screen content (e.g., \"1200px\", \"80rem\"). When set, centers content with auto margins on sides."
-          },
-          "enableTitle": {
-            "type": "boolean",
-            "description": "When false, hides the screen title. Default is true."
-          },
-          "enablePrimaryActionBar": {
-            "type": "boolean",
-            "description": "When false, hides the primary action bar. Default is true."
-          },
-          "requiredPermissions": {
-            "type": "array",
-            "items": {},
-            "description": "Permissions required to access this screen"
-          },
-          "navigationItem": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          },
-          "feature": {
-            "type": "string",
-            "description": "Feature this screen belongs to (e.g. ui-screens)"
-          },
-          "isDetail": {
-            "type": "boolean",
-            "description": "When true, this screen is a detail/record view (not a listing)"
-          },
-          "title": {
-            "type": "string"
-          },
-          "metaDescription": {
-            "type": "string"
-          },
-          "metaKeywords": {
-            "type": "array",
-            "items": {}
-          },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
-          },
-          "searchString": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "avatarFile": {
-            "type": "string"
-          },
-          "previewImageFile": {
-            "type": "string"
-          },
-          "userId": {
-            "type": "string"
-          },
-          "userKey": {
-            "type": "string"
-          },
-          "baseScreenId": {
-            "type": "string"
-          },
-          "baseScreenKey": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "screenKey",
-          "url",
-          "status",
-          "searchString",
-          "summary",
-          "userId",
-          "baseScreenId"
-        ]
-      },
-      "CreateUserScreenInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "screenKey": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "urlPattern": {
-            "type": "string",
-            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
-          },
-          "model": {
-            "type": "string",
-            "description": "Related model for data-driven screens"
-          },
-          "dataSource": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Optional configuration: { screenId?: string } - Link to custom detail screen"
-          },
-          "layout": {
-            "type": "string",
-            "description": "Layout key to use for this screen"
-          },
-          "actions": {
-            "type": "array",
-            "items": {},
-            "description": "Custom action buttons for this screen (array of action objects)"
-          },
-          "status": {
-            "type": "string",
-            "description": "Current status of the screen"
-          },
-          "isPublic": {
-            "type": "boolean"
-          },
-          "comingSoon": {
-            "type": "boolean",
-            "description": "When true, this screen is not yet available and shows a Coming Soon placeholder"
-          },
-          "mapScreen": {
-            "type": "boolean",
-            "description": "When enabled, removes padding/margins and overlays screen icon and title in upper left"
-          },
-          "fullScreen": {
-            "type": "boolean",
-            "description": "When enabled, keeps header/actions visible but makes the grid fill remaining height"
-          },
-          "maxWidth": {
-            "type": "string",
-            "description": "Maximum width for screen content (e.g., \"1200px\", \"80rem\"). When set, centers content with auto margins on sides."
-          },
-          "enableTitle": {
-            "type": "boolean",
-            "description": "When false, hides the screen title. Default is true."
-          },
-          "enablePrimaryActionBar": {
-            "type": "boolean",
-            "description": "When false, hides the primary action bar. Default is true."
-          },
-          "requiredPermissions": {
-            "type": "array",
-            "items": {},
-            "description": "Permissions required to access this screen"
-          },
-          "navigationItem": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          },
-          "feature": {
-            "type": "string",
-            "description": "Feature this screen belongs to (e.g. ui-screens)"
-          },
-          "isDetail": {
-            "type": "boolean",
-            "description": "When true, this screen is a detail/record view (not a listing)"
-          },
-          "title": {
-            "type": "string"
-          },
-          "metaDescription": {
-            "type": "string"
-          },
-          "metaKeywords": {
-            "type": "array",
-            "items": {}
-          },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
-          },
-          "searchString": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "avatarFile": {
-            "type": "string"
-          },
-          "previewImageFile": {
-            "type": "string"
-          },
-          "userId": {
-            "type": "string"
-          },
-          "userKey": {
-            "type": "string"
-          },
-          "baseScreenId": {
-            "type": "string"
-          },
-          "baseScreenKey": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "screenKey",
-          "url",
-          "status",
-          "searchString",
-          "summary",
-          "userId",
-          "baseScreenId"
-        ],
-        "description": "Auto-generated createInput for UserScreen"
-      },
-      "UpdateUserScreenInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "screenKey": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "urlPattern": {
-            "type": "string",
-            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
-          },
-          "model": {
-            "type": "string",
-            "description": "Related model for data-driven screens"
-          },
-          "dataSource": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Optional configuration: { screenId?: string } - Link to custom detail screen"
-          },
-          "layout": {
-            "type": "string",
-            "description": "Layout key to use for this screen"
-          },
-          "actions": {
-            "type": "array",
-            "items": {},
-            "description": "Custom action buttons for this screen (array of action objects)"
-          },
-          "status": {
-            "type": "string",
-            "description": "Current status of the screen"
-          },
-          "isPublic": {
-            "type": "boolean"
-          },
-          "comingSoon": {
-            "type": "boolean",
-            "description": "When true, this screen is not yet available and shows a Coming Soon placeholder"
-          },
-          "mapScreen": {
-            "type": "boolean",
-            "description": "When enabled, removes padding/margins and overlays screen icon and title in upper left"
-          },
-          "fullScreen": {
-            "type": "boolean",
-            "description": "When enabled, keeps header/actions visible but makes the grid fill remaining height"
-          },
-          "maxWidth": {
-            "type": "string",
-            "description": "Maximum width for screen content (e.g., \"1200px\", \"80rem\"). When set, centers content with auto margins on sides."
-          },
-          "enableTitle": {
-            "type": "boolean",
-            "description": "When false, hides the screen title. Default is true."
-          },
-          "enablePrimaryActionBar": {
-            "type": "boolean",
-            "description": "When false, hides the primary action bar. Default is true."
-          },
-          "requiredPermissions": {
-            "type": "array",
-            "items": {},
-            "description": "Permissions required to access this screen"
-          },
-          "navigationItem": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          },
-          "feature": {
-            "type": "string",
-            "description": "Feature this screen belongs to (e.g. ui-screens)"
-          },
-          "isDetail": {
-            "type": "boolean",
-            "description": "When true, this screen is a detail/record view (not a listing)"
-          },
-          "title": {
-            "type": "string"
-          },
-          "metaDescription": {
-            "type": "string"
-          },
-          "metaKeywords": {
-            "type": "array",
-            "items": {}
-          },
-          "masterBackup": {
-            "type": "object",
-            "additionalProperties": true,
-            "description": "Backup of the original screen configuration before customization"
-          },
-          "masterBackupDate": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the master backup was created"
-          },
-          "searchString": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "avatarFile": {
-            "type": "string"
-          },
-          "previewImageFile": {
-            "type": "string"
-          },
-          "userId": {
-            "type": "string"
-          },
-          "userKey": {
-            "type": "string"
-          },
-          "baseScreenId": {
-            "type": "string"
-          },
-          "baseScreenKey": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "screenKey",
-          "url",
-          "status",
-          "searchString",
-          "summary",
-          "userId",
-          "baseScreenId"
-        ],
-        "description": "Auto-generated updateInput for UserScreen"
       },
       "SupportTicketResolution": {
         "type": "object",
@@ -10169,21 +9625,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ]
       },
       "SupportTicketResolutionFilter": {
@@ -10221,21 +9667,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ]
       },
       "CreateSupportTicketResolutionInput": {
@@ -10273,21 +9709,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ],
         "description": "Auto-generated createInput for SupportTicketResolution"
       },
@@ -10326,21 +9752,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ],
         "description": "Auto-generated updateInput for SupportTicketResolution"
       },
@@ -10353,16 +9769,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "ScreenNoteFilter": {
@@ -10374,16 +9785,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CreateScreenNoteInput": {
@@ -10395,16 +9801,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated createInput for ScreenNote"
       },
@@ -10417,16 +9818,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated updateInput for ScreenNote"
       },
@@ -10439,16 +9835,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "ScreenFileFilter": {
@@ -10460,16 +9851,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateScreenFileInput": {
@@ -10481,16 +9867,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for ScreenFile"
       },
@@ -10503,16 +9884,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for ScreenFile"
       },
@@ -10525,16 +9901,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "ScreenTaskFilter": {
@@ -10546,16 +9917,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CreateScreenTaskInput": {
@@ -10567,16 +9933,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated createInput for ScreenTask"
       },
@@ -10589,16 +9950,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "screen",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated updateInput for ScreenTask"
       },
@@ -10611,16 +9967,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "AnnouncementNoteFilter": {
@@ -10632,16 +9983,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CreateAnnouncementNoteInput": {
@@ -10653,16 +9999,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated createInput for AnnouncementNote"
       },
@@ -10675,16 +10016,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated updateInput for AnnouncementNote"
       },
@@ -10697,16 +10033,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "AnnouncementFileFilter": {
@@ -10718,16 +10049,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateAnnouncementFileInput": {
@@ -10739,16 +10065,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for AnnouncementFile"
       },
@@ -10761,16 +10082,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for AnnouncementFile"
       },
@@ -10783,16 +10099,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "AnnouncementTaskFilter": {
@@ -10804,16 +10115,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CreateAnnouncementTaskInput": {
@@ -10825,16 +10131,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated createInput for AnnouncementTask"
       },
@@ -10847,16 +10148,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "enterpriseProductAnnouncement",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated updateInput for AnnouncementTask"
       },
@@ -10866,62 +10162,70 @@
           "screenId": {
             "type": "string"
           },
-          "componentKey": {
-            "type": "string"
-          },
           "componentId": {
             "type": "string"
           },
-          "modelKey": {
+          "componentKey": {
             "type": "string"
           },
-          "isVisible": {
-            "type": "boolean"
+          "scope": {
+            "type": "string",
+            "enum": [
+              "system",
+              "personal",
+              "shared"
+            ],
+            "description": "system (default), personal (user overlay), or shared (team-visible on base screen)"
           },
-          "isEditable": {
-            "type": "boolean"
+          "userId": {
+            "type": "string",
+            "description": "Owner for personal components; cleared when promoted to shared"
           },
-          "width": {
-            "type": "number"
-          },
-          "x": {
-            "type": "number"
-          },
-          "y": {
-            "type": "number"
-          },
-          "order": {
-            "type": "number"
-          },
-          "priority": {
-            "type": "number"
-          },
-          "parentLayoutId": {
-            "type": "string"
-          },
-          "parentTabId": {
+          "userKey": {
             "type": "string"
           },
           "config": {
             "type": "object",
-            "additionalProperties": true
+            "additionalProperties": true,
+            "description": "Component configuration (dataSourceKey, title, viewMode, filters, etc.)"
+          },
+          "parentTabId": {
+            "type": "string",
+            "description": "Id of the parent tabs component this component is grouped under"
+          },
+          "parentLayoutId": {
+            "type": "string",
+            "description": "Id of the parent layout-component this component is nested in"
+          },
+          "order": {
+            "type": "number",
+            "description": "Render order within its parent"
+          },
+          "width": {
+            "type": "number",
+            "description": "Grid column span"
+          },
+          "x": {
+            "type": "number",
+            "description": "Grid x position"
+          },
+          "priority": {
+            "type": "number",
+            "description": "Mobile stacking priority"
+          },
+          "isVisible": {
+            "type": "boolean",
+            "description": "Whether the component is rendered. Absent or true means visible; false hides the component."
+          },
+          "isEditable": {
+            "type": "boolean",
+            "description": "Whether the component can be edited by the user."
           }
         },
         "required": [
           "screenId",
-          "componentKey",
           "componentId",
-          "modelKey",
-          "isVisible",
-          "isEditable",
-          "width",
-          "x",
-          "y",
-          "order",
-          "priority",
-          "parentLayoutId",
-          "parentTabId",
-          "config"
+          "componentKey"
         ]
       },
       "ScreenComponentFilter": {
@@ -10930,62 +10234,70 @@
           "screenId": {
             "type": "string"
           },
-          "componentKey": {
-            "type": "string"
-          },
           "componentId": {
             "type": "string"
           },
-          "modelKey": {
+          "componentKey": {
             "type": "string"
           },
-          "isVisible": {
-            "type": "boolean"
+          "scope": {
+            "type": "string",
+            "enum": [
+              "system",
+              "personal",
+              "shared"
+            ],
+            "description": "system (default), personal (user overlay), or shared (team-visible on base screen)"
           },
-          "isEditable": {
-            "type": "boolean"
+          "userId": {
+            "type": "string",
+            "description": "Owner for personal components; cleared when promoted to shared"
           },
-          "width": {
-            "type": "number"
-          },
-          "x": {
-            "type": "number"
-          },
-          "y": {
-            "type": "number"
-          },
-          "order": {
-            "type": "number"
-          },
-          "priority": {
-            "type": "number"
-          },
-          "parentLayoutId": {
-            "type": "string"
-          },
-          "parentTabId": {
+          "userKey": {
             "type": "string"
           },
           "config": {
             "type": "object",
-            "additionalProperties": true
+            "additionalProperties": true,
+            "description": "Component configuration (dataSourceKey, title, viewMode, filters, etc.)"
+          },
+          "parentTabId": {
+            "type": "string",
+            "description": "Id of the parent tabs component this component is grouped under"
+          },
+          "parentLayoutId": {
+            "type": "string",
+            "description": "Id of the parent layout-component this component is nested in"
+          },
+          "order": {
+            "type": "number",
+            "description": "Render order within its parent"
+          },
+          "width": {
+            "type": "number",
+            "description": "Grid column span"
+          },
+          "x": {
+            "type": "number",
+            "description": "Grid x position"
+          },
+          "priority": {
+            "type": "number",
+            "description": "Mobile stacking priority"
+          },
+          "isVisible": {
+            "type": "boolean",
+            "description": "Whether the component is rendered. Absent or true means visible; false hides the component."
+          },
+          "isEditable": {
+            "type": "boolean",
+            "description": "Whether the component can be edited by the user."
           }
         },
         "required": [
           "screenId",
-          "componentKey",
           "componentId",
-          "modelKey",
-          "isVisible",
-          "isEditable",
-          "width",
-          "x",
-          "y",
-          "order",
-          "priority",
-          "parentLayoutId",
-          "parentTabId",
-          "config"
+          "componentKey"
         ]
       },
       "CreateScreenComponentInput": {
@@ -10994,62 +10306,70 @@
           "screenId": {
             "type": "string"
           },
-          "componentKey": {
-            "type": "string"
-          },
           "componentId": {
             "type": "string"
           },
-          "modelKey": {
+          "componentKey": {
             "type": "string"
           },
-          "isVisible": {
-            "type": "boolean"
+          "scope": {
+            "type": "string",
+            "enum": [
+              "system",
+              "personal",
+              "shared"
+            ],
+            "description": "system (default), personal (user overlay), or shared (team-visible on base screen)"
           },
-          "isEditable": {
-            "type": "boolean"
+          "userId": {
+            "type": "string",
+            "description": "Owner for personal components; cleared when promoted to shared"
           },
-          "width": {
-            "type": "number"
-          },
-          "x": {
-            "type": "number"
-          },
-          "y": {
-            "type": "number"
-          },
-          "order": {
-            "type": "number"
-          },
-          "priority": {
-            "type": "number"
-          },
-          "parentLayoutId": {
-            "type": "string"
-          },
-          "parentTabId": {
+          "userKey": {
             "type": "string"
           },
           "config": {
             "type": "object",
-            "additionalProperties": true
+            "additionalProperties": true,
+            "description": "Component configuration (dataSourceKey, title, viewMode, filters, etc.)"
+          },
+          "parentTabId": {
+            "type": "string",
+            "description": "Id of the parent tabs component this component is grouped under"
+          },
+          "parentLayoutId": {
+            "type": "string",
+            "description": "Id of the parent layout-component this component is nested in"
+          },
+          "order": {
+            "type": "number",
+            "description": "Render order within its parent"
+          },
+          "width": {
+            "type": "number",
+            "description": "Grid column span"
+          },
+          "x": {
+            "type": "number",
+            "description": "Grid x position"
+          },
+          "priority": {
+            "type": "number",
+            "description": "Mobile stacking priority"
+          },
+          "isVisible": {
+            "type": "boolean",
+            "description": "Whether the component is rendered. Absent or true means visible; false hides the component."
+          },
+          "isEditable": {
+            "type": "boolean",
+            "description": "Whether the component can be edited by the user."
           }
         },
         "required": [
           "screenId",
-          "componentKey",
           "componentId",
-          "modelKey",
-          "isVisible",
-          "isEditable",
-          "width",
-          "x",
-          "y",
-          "order",
-          "priority",
-          "parentLayoutId",
-          "parentTabId",
-          "config"
+          "componentKey"
         ],
         "description": "Auto-generated createInput for ScreenComponent"
       },
@@ -11059,71 +10379,275 @@
           "screenId": {
             "type": "string"
           },
-          "componentKey": {
-            "type": "string"
-          },
           "componentId": {
             "type": "string"
           },
-          "modelKey": {
+          "componentKey": {
             "type": "string"
           },
-          "isVisible": {
-            "type": "boolean"
+          "scope": {
+            "type": "string",
+            "enum": [
+              "system",
+              "personal",
+              "shared"
+            ],
+            "description": "system (default), personal (user overlay), or shared (team-visible on base screen)"
           },
-          "isEditable": {
-            "type": "boolean"
+          "userId": {
+            "type": "string",
+            "description": "Owner for personal components; cleared when promoted to shared"
           },
-          "width": {
-            "type": "number"
-          },
-          "x": {
-            "type": "number"
-          },
-          "y": {
-            "type": "number"
-          },
-          "order": {
-            "type": "number"
-          },
-          "priority": {
-            "type": "number"
-          },
-          "parentLayoutId": {
-            "type": "string"
-          },
-          "parentTabId": {
+          "userKey": {
             "type": "string"
           },
           "config": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Component configuration (dataSourceKey, title, viewMode, filters, etc.)"
+          },
+          "parentTabId": {
+            "type": "string",
+            "description": "Id of the parent tabs component this component is grouped under"
+          },
+          "parentLayoutId": {
+            "type": "string",
+            "description": "Id of the parent layout-component this component is nested in"
+          },
+          "order": {
+            "type": "number",
+            "description": "Render order within its parent"
+          },
+          "width": {
+            "type": "number",
+            "description": "Grid column span"
+          },
+          "x": {
+            "type": "number",
+            "description": "Grid x position"
+          },
+          "priority": {
+            "type": "number",
+            "description": "Mobile stacking priority"
+          },
+          "isVisible": {
+            "type": "boolean",
+            "description": "Whether the component is rendered. Absent or true means visible; false hides the component."
+          },
+          "isEditable": {
+            "type": "boolean",
+            "description": "Whether the component can be edited by the user."
+          }
+        },
+        "required": [
+          "screenId",
+          "componentId",
+          "componentKey"
+        ],
+        "description": "Auto-generated updateInput for ScreenComponent"
+      },
+      "UserScreen": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "urlPattern": {
+            "type": "string",
+            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "baseScreenId": {
+            "type": "string"
+          },
+          "baseScreenKey": {
+            "type": "string"
+          },
+          "componentConfigOverrides": {
             "type": "object",
             "additionalProperties": true
           }
         },
         "required": [
-          "screenId",
-          "componentKey",
-          "componentId",
-          "modelKey",
-          "isVisible",
-          "isEditable",
-          "width",
-          "x",
-          "y",
-          "order",
-          "priority",
-          "parentLayoutId",
-          "parentTabId",
-          "config"
+          "name",
+          "screenKey",
+          "url",
+          "userId",
+          "baseScreenId"
+        ]
+      },
+      "UserScreenFilter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "urlPattern": {
+            "type": "string",
+            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "baseScreenId": {
+            "type": "string"
+          },
+          "baseScreenKey": {
+            "type": "string"
+          },
+          "componentConfigOverrides": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "screenKey",
+          "url",
+          "userId",
+          "baseScreenId"
+        ]
+      },
+      "CreateUserScreenInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "urlPattern": {
+            "type": "string",
+            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "baseScreenId": {
+            "type": "string"
+          },
+          "baseScreenKey": {
+            "type": "string"
+          },
+          "componentConfigOverrides": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "screenKey",
+          "url",
+          "userId",
+          "baseScreenId"
         ],
-        "description": "Auto-generated updateInput for ScreenComponent"
+        "description": "Auto-generated createInput for UserScreen"
+      },
+      "UpdateUserScreenInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "screenKey": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "urlPattern": {
+            "type": "string",
+            "description": "Pattern for dynamic URLs (e.g., /users/:id)"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "userKey": {
+            "type": "string"
+          },
+          "baseScreenId": {
+            "type": "string"
+          },
+          "baseScreenKey": {
+            "type": "string"
+          },
+          "componentConfigOverrides": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name",
+          "screenKey",
+          "url",
+          "userId",
+          "baseScreenId"
+        ],
+        "description": "Auto-generated updateInput for UserScreen"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }

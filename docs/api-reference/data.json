@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Data API",
-    "version": "1.0.38",
-    "description": "Foundation of the platform \u2014 model registry, auto-CRUD for all registered models, avatar generation, image preview, and real-time change streaming.\n\n## Sections\n\n- [Avatar](/api/data/tag/avatar)\n- [Data](/api/data/tag/data)\n- [Features](/api/data/tag/features)\n- [Field Types](/api/data/tag/field-types)\n- [Icons](/api/data/tag/icons)\n- [Model Fields](/api/data/tag/model-fields)\n- [Model Files](/api/data/tag/model-files)\n- [Model Layouts](/api/data/tag/model-layouts)\n- [Model Notes](/api/data/tag/model-notes)\n- [Model Tasks](/api/data/tag/model-tasks)\n- [Models](/api/data/tag/models)\n- [Navigation Items](/api/data/tag/navigation-items)\n- [Previewimage](/api/data/tag/previewimage)\n- [Query](/api/data/tag/query)"
+    "version": "1.0.58",
+    "description": "OpenAPI 3.1 document for the `data` module, generated from Enterprise module interface specifications."
   },
   "tags": [
     {
@@ -14,6 +14,9 @@
     },
     {
       "name": "Features"
+    },
+    {
+      "name": "Field Mapping Value Sources"
     },
     {
       "name": "Field Types"
@@ -47,9 +50,138 @@
     },
     {
       "name": "Query"
+    },
+    {
+      "name": "Record Files"
+    },
+    {
+      "name": "Record Notes"
+    },
+    {
+      "name": "Record Tasks"
     }
   ],
   "paths": {
+    "/api/data/core-accounts": {
+      "get": {
+        "operationId": "data.data.getCoreAccounts",
+        "tags": [
+          "Data"
+        ],
+        "summary": "Get Core Accounts",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CoreTenantAccountRecord"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:data:read"
+      }
+    },
+    "/api/data/core-account": {
+      "get": {
+        "operationId": "data.data.getCoreAccountByKey",
+        "tags": [
+          "Data"
+        ],
+        "summary": "Get Core Account By Key",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/CoreTenantAccountRecord"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:data:read"
+      }
+    },
+    "/api/data/register-tenant": {
+      "post": {
+        "operationId": "data.data.registerTenant",
+        "tags": [
+          "Data"
+        ],
+        "summary": "Register Tenant",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:data:write"
+      }
+    },
     "/api/data/health": {
       "get": {
         "operationId": "data.data.healthCheck",
@@ -2233,10 +2365,791 @@
         "x-scope": "clientServer",
         "x-permission": "data:modelTasks:delete"
       }
+    },
+    "/api/data/recordNotes": {
+      "get": {
+        "operationId": "data.recordNotes.query",
+        "tags": [
+          "Record Notes"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordNote"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/RecordNoteFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordNotes:read"
+      },
+      "post": {
+        "operationId": "data.recordNotes.create",
+        "tags": [
+          "Record Notes"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordNoteInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:recordNotes:write"
+      }
+    },
+    "/api/data/recordNotes/{id}": {
+      "get": {
+        "operationId": "data.recordNotes.getById",
+        "tags": [
+          "Record Notes"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordNotes:read"
+      },
+      "put": {
+        "operationId": "data.recordNotes.update",
+        "tags": [
+          "Record Notes"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNote"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecordNoteInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:recordNotes:write"
+      },
+      "delete": {
+        "operationId": "data.recordNotes.delete",
+        "tags": [
+          "Record Notes"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordNotes:delete"
+      }
+    },
+    "/api/data/recordFiles": {
+      "get": {
+        "operationId": "data.recordFiles.query",
+        "tags": [
+          "Record Files"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordFile"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/RecordFileFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordFiles:read"
+      },
+      "post": {
+        "operationId": "data.recordFiles.create",
+        "tags": [
+          "Record Files"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordFileInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:recordFiles:write"
+      }
+    },
+    "/api/data/recordFiles/{id}": {
+      "get": {
+        "operationId": "data.recordFiles.getById",
+        "tags": [
+          "Record Files"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordFiles:read"
+      },
+      "put": {
+        "operationId": "data.recordFiles.update",
+        "tags": [
+          "Record Files"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecordFileInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:recordFiles:write"
+      },
+      "delete": {
+        "operationId": "data.recordFiles.delete",
+        "tags": [
+          "Record Files"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordFiles:delete"
+      }
+    },
+    "/api/data/recordTasks": {
+      "get": {
+        "operationId": "data.recordTasks.query",
+        "tags": [
+          "Record Tasks"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordTask"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/RecordTaskFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordTasks:read"
+      },
+      "post": {
+        "operationId": "data.recordTasks.create",
+        "tags": [
+          "Record Tasks"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordTaskInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:recordTasks:write"
+      }
+    },
+    "/api/data/recordTasks/{id}": {
+      "get": {
+        "operationId": "data.recordTasks.getById",
+        "tags": [
+          "Record Tasks"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordTasks:read"
+      },
+      "put": {
+        "operationId": "data.recordTasks.update",
+        "tags": [
+          "Record Tasks"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordTask"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecordTaskInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:recordTasks:write"
+      },
+      "delete": {
+        "operationId": "data.recordTasks.delete",
+        "tags": [
+          "Record Tasks"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:recordTasks:delete"
+      }
+    },
+    "/api/data/fieldMappingValueSources": {
+      "get": {
+        "operationId": "data.fieldMappingValueSources.query",
+        "tags": [
+          "Field Mapping Value Sources"
+        ],
+        "summary": "Query",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldMappingValueSource"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/FieldMappingValueSourceFilter"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:fieldMappingValueSources:read"
+      },
+      "post": {
+        "operationId": "data.fieldMappingValueSources.create",
+        "tags": [
+          "Field Mapping Value Sources"
+        ],
+        "summary": "Create",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldMappingValueSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFieldMappingValueSourceInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:fieldMappingValueSources:write"
+      }
+    },
+    "/api/data/fieldMappingValueSources/{id}": {
+      "get": {
+        "operationId": "data.fieldMappingValueSources.getById",
+        "tags": [
+          "Field Mapping Value Sources"
+        ],
+        "summary": "Get By Id",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldMappingValueSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:fieldMappingValueSources:read"
+      },
+      "put": {
+        "operationId": "data.fieldMappingValueSources.update",
+        "tags": [
+          "Field Mapping Value Sources"
+        ],
+        "summary": "Update",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldMappingValueSource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFieldMappingValueSourceInput"
+              }
+            }
+          }
+        },
+        "x-scope": "clientServer",
+        "x-permission": "data:fieldMappingValueSources:write"
+      },
+      "delete": {
+        "operationId": "data.fieldMappingValueSources.delete",
+        "tags": [
+          "Field Mapping Value Sources"
+        ],
+        "summary": "Delete",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-scope": "clientServer",
+        "x-permission": "data:fieldMappingValueSources:delete"
+      }
     }
   },
   "components": {
     "schemas": {
+      "CoreTenantAccountRecord": {},
       "DataHealthResponse": {},
       "CrudModelDef": {},
       "RouteInfoResponse": {},
@@ -2616,6 +3529,10 @@
           },
           "summary": {
             "type": "string"
+          },
+          "animated": {
+            "type": "boolean",
+            "description": "When true, the icon uses a platform animation renderer (e.g. thinking dots)"
           }
         },
         "required": [
@@ -2690,6 +3607,10 @@
           },
           "summary": {
             "type": "string"
+          },
+          "animated": {
+            "type": "boolean",
+            "description": "When true, the icon uses a platform animation renderer (e.g. thinking dots)"
           }
         },
         "required": [
@@ -2764,6 +3685,10 @@
           },
           "summary": {
             "type": "string"
+          },
+          "animated": {
+            "type": "boolean",
+            "description": "When true, the icon uses a platform animation renderer (e.g. thinking dots)"
           }
         },
         "required": [
@@ -2839,6 +3764,10 @@
           },
           "summary": {
             "type": "string"
+          },
+          "animated": {
+            "type": "boolean",
+            "description": "When true, the icon uses a platform animation renderer (e.g. thinking dots)"
           }
         },
         "required": [
@@ -2896,7 +3825,7 @@
           },
           "icon": {
             "type": "string",
-            "description": "Icon used to represent this model in the UI \u2014 links to the icons collection"
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
           },
           "fields": {
             "type": "array",
@@ -2936,14 +3865,6 @@
           "version": {
             "type": "string",
             "description": "Model version"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -2952,9 +3873,7 @@
           "databaseTarget",
           "fields",
           "layouts",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "ModelFilter": {
@@ -3002,7 +3921,7 @@
           },
           "icon": {
             "type": "string",
-            "description": "Icon used to represent this model in the UI \u2014 links to the icons collection"
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
           },
           "fields": {
             "type": "array",
@@ -3042,14 +3961,6 @@
           "version": {
             "type": "string",
             "description": "Model version"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -3058,9 +3969,7 @@
           "databaseTarget",
           "fields",
           "layouts",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ]
       },
       "CreateModelInput": {
@@ -3108,7 +4017,7 @@
           },
           "icon": {
             "type": "string",
-            "description": "Icon used to represent this model in the UI \u2014 links to the icons collection"
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
           },
           "fields": {
             "type": "array",
@@ -3148,14 +4057,6 @@
           "version": {
             "type": "string",
             "description": "Model version"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -3164,9 +4065,7 @@
           "databaseTarget",
           "fields",
           "layouts",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated createInput for Model"
       },
@@ -3215,7 +4114,7 @@
           },
           "icon": {
             "type": "string",
-            "description": "Icon used to represent this model in the UI \u2014 links to the icons collection"
+            "description": "Icon used to represent this model in the UI — links to the icons collection"
           },
           "fields": {
             "type": "array",
@@ -3255,14 +4154,6 @@
           "version": {
             "type": "string",
             "description": "Model version"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
@@ -3271,9 +4162,7 @@
           "databaseTarget",
           "fields",
           "layouts",
-          "status",
-          "createdByDate",
-          "updatedByDate"
+          "status"
         ],
         "description": "Auto-generated updateInput for Model"
       },
@@ -4131,7 +5020,7 @@
               "type": "object",
               "additionalProperties": true
             },
-            "description": "Tab definitions for details-type layouts. Each tab has sections \u2192 fields."
+            "description": "Tab definitions for details-type layouts. Each tab has sections → fields."
           },
           "fields": {
             "type": "array",
@@ -4192,7 +5081,7 @@
               "type": "object",
               "additionalProperties": true
             },
-            "description": "Tab definitions for details-type layouts. Each tab has sections \u2192 fields."
+            "description": "Tab definitions for details-type layouts. Each tab has sections → fields."
           },
           "fields": {
             "type": "array",
@@ -4253,7 +5142,7 @@
               "type": "object",
               "additionalProperties": true
             },
-            "description": "Tab definitions for details-type layouts. Each tab has sections \u2192 fields."
+            "description": "Tab definitions for details-type layouts. Each tab has sections → fields."
           },
           "fields": {
             "type": "array",
@@ -4315,7 +5204,7 @@
               "type": "object",
               "additionalProperties": true
             },
-            "description": "Tab definitions for details-type layouts. Each tab has sections \u2192 fields."
+            "description": "Tab definitions for details-type layouts. Each tab has sections → fields."
           },
           "fields": {
             "type": "array",
@@ -4394,21 +5283,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ]
       },
       "FieldTypeFilter": {
@@ -4466,21 +5345,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ]
       },
       "CreateFieldTypeInput": {
@@ -4538,21 +5407,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ],
         "description": "Auto-generated createInput for FieldType"
       },
@@ -4611,21 +5470,11 @@
           "sortOrder": {
             "type": "number",
             "description": "Display order in selection lists (lower = first)"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "name",
-          "key",
-          "createdByDate",
-          "updatedByDate"
+          "key"
         ],
         "description": "Auto-generated updateInput for FieldType"
       },
@@ -4638,16 +5487,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "ModelNoteFilter": {
@@ -4659,16 +5503,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "note",
-          "createdByDate"
+          "note"
         ]
       },
       "CreateModelNoteInput": {
@@ -4680,16 +5519,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated createInput for ModelNote"
       },
@@ -4702,16 +5536,11 @@
           },
           "note": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "note",
-          "createdByDate"
+          "note"
         ],
         "description": "Auto-generated updateInput for ModelNote"
       },
@@ -4724,16 +5553,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "ModelFileFilter": {
@@ -4745,16 +5569,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "file",
-          "createdByDate"
+          "file"
         ]
       },
       "CreateModelFileInput": {
@@ -4766,16 +5585,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated createInput for ModelFile"
       },
@@ -4788,16 +5602,11 @@
           },
           "file": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "file",
-          "createdByDate"
+          "file"
         ],
         "description": "Auto-generated updateInput for ModelFile"
       },
@@ -4810,16 +5619,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "ModelTaskFilter": {
@@ -4831,16 +5635,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "task",
-          "createdByDate"
+          "task"
         ]
       },
       "CreateModelTaskInput": {
@@ -4852,16 +5651,11 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated createInput for ModelTask"
       },
@@ -4874,39 +5668,351 @@
           },
           "task": {
             "type": "string"
-          },
-          "createdByDate": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "model",
-          "task",
-          "createdByDate"
+          "task"
         ],
         "description": "Auto-generated updateInput for ModelTask"
+      },
+      "RecordNote": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this note belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this note belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "note"
+        ]
+      },
+      "RecordNoteFilter": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this note belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this note belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "note"
+        ]
+      },
+      "CreateRecordNoteInput": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this note belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this note belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "note"
+        ],
+        "description": "Auto-generated createInput for RecordNote"
+      },
+      "UpdateRecordNoteInput": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this note belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this note belongs to"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "note"
+        ],
+        "description": "Auto-generated updateInput for RecordNote"
+      },
+      "RecordFile": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this file belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this file belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "file"
+        ]
+      },
+      "RecordFileFilter": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this file belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this file belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "file"
+        ]
+      },
+      "CreateRecordFileInput": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this file belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this file belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "file"
+        ],
+        "description": "Auto-generated createInput for RecordFile"
+      },
+      "UpdateRecordFileInput": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this file belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this file belongs to"
+          },
+          "file": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "file"
+        ],
+        "description": "Auto-generated updateInput for RecordFile"
+      },
+      "RecordTask": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this task belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this task belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "task"
+        ]
+      },
+      "RecordTaskFilter": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this task belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this task belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "task"
+        ]
+      },
+      "CreateRecordTaskInput": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this task belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this task belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "task"
+        ],
+        "description": "Auto-generated createInput for RecordTask"
+      },
+      "UpdateRecordTaskInput": {
+        "type": "object",
+        "properties": {
+          "parentModel": {
+            "description": "modelKey of the parent record this task belongs to"
+          },
+          "parentRecordId": {
+            "description": "_id (as string) of the parent record this task belongs to"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentModel",
+          "parentRecordId",
+          "task"
+        ],
+        "description": "Auto-generated updateInput for RecordTask"
+      },
+      "FieldMappingValueSource": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable name (e.g. \"From CSV\", \"Explicit value\")"
+          },
+          "key": {
+            "type": "string",
+            "description": "Programmatic key stored on mappings (e.g. 'csv', 'explicit')"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this value source means and how it behaves during import"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ]
+      },
+      "FieldMappingValueSourceFilter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable name (e.g. \"From CSV\", \"Explicit value\")"
+          },
+          "key": {
+            "type": "string",
+            "description": "Programmatic key stored on mappings (e.g. 'csv', 'explicit')"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this value source means and how it behaves during import"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ]
+      },
+      "CreateFieldMappingValueSourceInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable name (e.g. \"From CSV\", \"Explicit value\")"
+          },
+          "key": {
+            "type": "string",
+            "description": "Programmatic key stored on mappings (e.g. 'csv', 'explicit')"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this value source means and how it behaves during import"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "description": "Auto-generated createInput for FieldMappingValueSource"
+      },
+      "UpdateFieldMappingValueSourceInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable name (e.g. \"From CSV\", \"Explicit value\")"
+          },
+          "key": {
+            "type": "string",
+            "description": "Programmatic key stored on mappings (e.g. 'csv', 'explicit')"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this value source means and how it behaves during import"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "description": "Auto-generated updateInput for FieldMappingValueSource"
       }
     }
   },
   "x-warnings": [
-    "Unresolved type 'DataHealthResponse' \u2192 emitted permissive schema {}",
-    "Unresolved type 'CrudModelDef' \u2192 emitted permissive schema {}",
-    "Unresolved type 'RouteInfoResponse' \u2192 emitted permissive schema {}",
-    "Unresolved type 'ReloadModelsResponse' \u2192 emitted permissive schema {}",
-    "Unresolved type 'AvatarGenerateResult' \u2192 emitted permissive schema {}",
-    "Unresolved type 'AvatarGenerateRequest' \u2192 emitted permissive schema {}",
-    "Unresolved type 'PreviewImageGenerateResult' \u2192 emitted permissive schema {}",
-    "Unresolved type 'PreviewImageGenerateRequest' \u2192 emitted permissive schema {}",
-    "Unresolved type 'PaginatedQueryResult' \u2192 emitted permissive schema {}",
-    "Unresolved type 'PaginatedQueryRequest' \u2192 emitted permissive schema {}",
+    "Unresolved type 'CoreTenantAccountRecord' → emitted permissive schema {}",
+    "Unresolved type 'DataHealthResponse' → emitted permissive schema {}",
+    "Unresolved type 'CrudModelDef' → emitted permissive schema {}",
+    "Unresolved type 'RouteInfoResponse' → emitted permissive schema {}",
+    "Unresolved type 'ReloadModelsResponse' → emitted permissive schema {}",
+    "Unresolved type 'AvatarGenerateResult' → emitted permissive schema {}",
+    "Unresolved type 'AvatarGenerateRequest' → emitted permissive schema {}",
+    "Unresolved type 'PreviewImageGenerateResult' → emitted permissive schema {}",
+    "Unresolved type 'PreviewImageGenerateRequest' → emitted permissive schema {}",
+    "Unresolved type 'PaginatedQueryResult' → emitted permissive schema {}",
+    "Unresolved type 'PaginatedQueryRequest' → emitted permissive schema {}",
     "Duplicate operation for GET /api/data/models (data.data.getAvailableModels vs data.models.query); keeping the latter",
-    "Unknown field type 'textarea' on field 'description', emitting permissive schema {}"
-  ],
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
+    "Unknown field type 'textarea' on field 'description', emitting permissive schema {}",
+    "Unknown field type 'value' on field 'parentModel', emitting permissive schema {}",
+    "Unknown field type 'value' on field 'parentRecordId', emitting permissive schema {}"
   ]
 }

@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Inventory API",
+    "title": "inventory API",
     "version": "0.0.0",
-    "description": "Physical asset tracking \u2014 equipment, stock, and storage locations."
+    "description": "CRUD endpoints for models owned by the `inventory` module."
   },
   "paths": {
     "/api/inventory/equipment": {
@@ -932,11 +932,5 @@
         "description": "Auto-generated updateInput for InventoryLocation"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.enterprisecrm.com",
-      "description": "Production API"
-    }
-  ]
+  }
 }
