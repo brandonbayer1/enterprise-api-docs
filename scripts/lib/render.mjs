@@ -49,7 +49,9 @@ export function renderPage({
   sidebarHtml,
   apiSpecUrl,
 }) {
-  const pageTitle = title === 'Enterprise API' ? title : `${title} — Enterprise API`;
+  const pageTitle = title === 'API Guide' ? title : `${title} — API Guide`;
+  const pageClass =
+    kind === 'api' || kind === 'api-index' ? ' class="page-api"' : '';
   const apiBody =
     kind === 'api' && apiSpecUrl
       ? `<div class="site-loading-shell" aria-live="polite" aria-busy="true">
@@ -72,7 +74,7 @@ export function renderPage({
       : `<main class="page-content guide-content">${bodyHtml}</main>`;
 
   return `<!doctype html>
-<html lang="en">
+<html lang="en"${pageClass}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -85,7 +87,7 @@ export function renderPage({
     <script src="/assets/search.js" defer></script>
     ${kind === 'api' ? '<script src="/assets/api-reference.js" defer></script>' : ''}
   </head>
-  <body>
+  <body${pageClass}>
     ${renderHeader(activeTab, activePath)}
     <div class="site-layout">
       <aside class="site-sidebar">${sidebarHtml}</aside>
@@ -102,7 +104,10 @@ export function renderPage({
 function renderHeader(activeTab, activePath) {
   return `<header class="site-header">
     <div class="site-header-left">
-      <a class="site-brand" href="/">Enterprise API</a>
+      <a class="site-brand" href="/" aria-label="API Guide home">
+        <img class="site-brand-logo" src="/assets/enterprise-logo.svg" alt="" width="115" height="24" decoding="async" />
+        <span class="site-brand-text">API Guide</span>
+      </a>
       <nav class="site-tabs" aria-label="Documentation sections">
         <a class="site-tab${activeTab === '/' ? ' active' : ''}" href="/">Guides</a>
         <a class="site-tab${activeTab === '/api' ? ' active' : ''}" href="/api/">API Reference</a>

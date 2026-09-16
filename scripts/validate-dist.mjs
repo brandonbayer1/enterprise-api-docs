@@ -55,7 +55,7 @@ async function checkPaths() {
       }
       if (path === '/' && ok) {
         const html = await resp.text();
-        if (!html.includes('Enterprise API') || !html.includes('page-content')) {
+        if (!html.includes('API Guide') || !html.includes('page-content')) {
           console.log('✗ / missing expected guide markup');
           failed += 1;
         }

@@ -38,7 +38,14 @@ function main() {
 
 function copyStaticAssets() {
   cpSync(join(ASSETS, 'favicon'), join(DIST, 'favicon'), { recursive: true });
-  for (const file of ['custom.css', 'site.css', 'theme.js', 'search.js', 'api-reference.js']) {
+  for (const file of [
+    'custom.css',
+    'site.css',
+    'theme.js',
+    'search.js',
+    'api-reference.js',
+    'enterprise-logo.svg',
+  ]) {
     cpSync(join(ASSETS, file), join(DIST, 'assets', file));
   }
 }
