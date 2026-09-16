@@ -50,22 +50,23 @@ export function renderPage({
   apiSpecUrl,
 }) {
   const pageTitle = title === 'API Guide' ? title : `${title} — API Guide`;
-  const pageClass =
-    kind === 'api' || kind === 'api-index' ? ' class="page-api"' : '';
+  const pageClass = kind === 'api' ? ' class="page-api"' : '';
   const apiBody =
     kind === 'api' && apiSpecUrl
-      ? `<div class="site-loading-shell" aria-live="polite" aria-busy="true">
-           <div class="site-loading-body">
-             <div class="site-loading-spinner" role="status"></div>
-             <p class="site-loading-label">Loading API reference…</p>
+      ? `<div class="api-reference-root">
+           <div class="site-loading-shell" aria-live="polite" aria-busy="true">
+             <div class="site-loading-body">
+               <div class="site-loading-spinner" role="status"></div>
+               <p class="site-loading-label">Loading API reference…</p>
+             </div>
            </div>
-         </div>
-         <script id="api-reference" type="application/json">${JSON.stringify({
-           url: apiSpecUrl,
-           theme: 'default',
-           authentication: { preferredSecurityScheme: 'bearerAuth' },
-         })}</script>
-         <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference" defer></script>`
+           <script id="api-reference" type="application/json">${JSON.stringify({
+             url: apiSpecUrl,
+             theme: 'default',
+             authentication: { preferredSecurityScheme: 'bearerAuth' },
+           })}</script>
+           <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference" defer></script>
+         </div>`
       : '';
 
   const mainContent =

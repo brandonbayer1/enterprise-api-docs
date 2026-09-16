@@ -145,13 +145,18 @@ body.page-api {
 }
 
 body.page-api {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 }
 
+body.page-api .site-header {
+  flex-shrink: 0;
+}
+
 body.page-api .site-layout {
-  height: calc(100vh - 53px);
+  flex: 1;
   min-height: 0;
-  max-height: calc(100vh - 53px);
   overflow: hidden;
 }
 
